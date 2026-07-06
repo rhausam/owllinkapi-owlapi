@@ -39,7 +39,6 @@
 
 package org.semanticweb.owlapi.owllink.parser;
 
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
 import org.semanticweb.owlapi.owllink.builtin.response.OK;
 import org.semanticweb.owlapi.owllink.builtin.response.OKImpl;
 
@@ -50,7 +49,7 @@ import org.semanticweb.owlapi.owllink.builtin.response.OKImpl;
  */
 public class OWLlinkOKElementHandler extends AbstractOWLlinkKBResponseElementHandler<OK> {
 
-    public OWLlinkOKElementHandler(OWLXMLParserHandler handler) {
+    public OWLlinkOKElementHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 

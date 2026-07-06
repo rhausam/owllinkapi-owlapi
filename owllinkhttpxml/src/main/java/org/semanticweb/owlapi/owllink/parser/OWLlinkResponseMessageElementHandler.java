@@ -39,7 +39,6 @@
 
 package org.semanticweb.owlapi.owllink.parser;
 
-import org.coode.owlapi.owlxmlparser.OWLXMLParserException;
 import org.semanticweb.owlapi.owllink.Response;
 
 import java.util.List;

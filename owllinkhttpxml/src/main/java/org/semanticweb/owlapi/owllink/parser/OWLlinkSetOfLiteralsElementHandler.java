@@ -39,9 +39,6 @@
 
 package org.semanticweb.owlapi.owllink.parser;
 
-import org.coode.owlapi.owlxmlparser.OWLLiteralElementHandler;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserException;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
 import org.semanticweb.owlapi.model.OWLLiteral;
 import org.semanticweb.owlapi.owllink.builtin.response.SetOfLiterals;
 import org.semanticweb.owlapi.owllink.builtin.response.SetOfLiteralsImpl;
@@ -53,7 +50,7 @@ import org.semanticweb.owlapi.owllink.builtin.response.SetOfLiteralsImpl;
  */
 public class OWLlinkSetOfLiteralsElementHandler extends AbstractSetOfOWLObjectResponseElementHandler<OWLLiteral> {
 
-    public OWLlinkSetOfLiteralsElementHandler(OWLXMLParserHandler handler) {
+    public OWLlinkSetOfLiteralsElementHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 

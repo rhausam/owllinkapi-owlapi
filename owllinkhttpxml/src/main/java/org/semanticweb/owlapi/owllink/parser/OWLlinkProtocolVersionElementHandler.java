@@ -39,8 +39,6 @@
 
 package org.semanticweb.owlapi.owllink.parser;
 
-import org.coode.owlapi.owlxmlparser.OWLXMLParserException;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
 import org.semanticweb.owlapi.owllink.OWLlinkXMLVocabulary;
 import org.semanticweb.owlapi.owllink.builtin.response.ProtocolVersion;
 import org.semanticweb.owlapi.owllink.builtin.response.ProtocolVersionImpl;
@@ -54,7 +52,7 @@ public class OWLlinkProtocolVersionElementHandler extends AbstractOWLlinkElement
     protected int major;
     protected int minor;
 
-    public OWLlinkProtocolVersionElementHandler(OWLXMLParserHandler handler) {
+    public OWLlinkProtocolVersionElementHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 

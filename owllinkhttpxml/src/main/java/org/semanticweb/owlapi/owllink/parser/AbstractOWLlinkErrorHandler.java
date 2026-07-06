@@ -39,9 +39,6 @@
 
 package org.semanticweb.owlapi.owllink.parser;
 
-import org.coode.owlapi.owlxmlparser.OWLXMLParserAttributeNotFoundException;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserException;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
 import org.semanticweb.owlapi.owllink.OWLlinkXMLVocabulary;
 import org.semanticweb.owlapi.owllink.builtin.response.OWLlinkErrorResponseException;
 
@@ -55,7 +52,7 @@ public abstract class AbstractOWLlinkErrorHandler<E extends OWLlinkErrorResponse
 
     protected String error;
 
-    public AbstractOWLlinkErrorHandler(OWLXMLParserHandler handler) {
+    public AbstractOWLlinkErrorHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 

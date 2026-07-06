@@ -39,8 +39,6 @@
 
 package org.semanticweb.owlapi.owllink.parser;
 
-import org.coode.owlapi.owlxmlparser.OWLXMLParserException;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
 import org.semanticweb.owlapi.owllink.builtin.response.Setting;
 import org.semanticweb.owlapi.owllink.builtin.response.SettingImpl;
 
@@ -51,7 +49,7 @@ import org.semanticweb.owlapi.owllink.builtin.response.SettingImpl;
  */
 public class OWLlinkSettingElementHandler extends OWLlinkConfigurationElementHandler<Setting> {
 
-    public OWLlinkSettingElementHandler(OWLXMLParserHandler handler) {
+    public OWLlinkSettingElementHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 

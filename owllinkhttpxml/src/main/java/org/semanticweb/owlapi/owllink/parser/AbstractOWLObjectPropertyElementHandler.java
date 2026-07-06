@@ -39,31 +39,35 @@
 
 package org.semanticweb.owlapi.owllink.parser;
 
-import org.semanticweb.owlapi.model.OWLObjectProperty;
-import org.semanticweb.owlapi.owllink.builtin.response.Hierarchy;
-import org.semanticweb.owlapi.owllink.builtin.response.ObjectPropertyHierarchyImpl;
+import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
 
 /**
- * Created by IntelliJ IDEA.
- * Author: Olaf Noppens
- * Date: 02.11.2009
+ * Self-contained shim handler wrapping an embedded OWL/XML {@code OWLObjectPropertyExpression}
+ * produced by the fragment-reparse driver. It keeps the same simple name as the
+ * former {@code org.coode.owlapi.owlxmlparser} handler so that consumer handlers
+ * need no import changes.
  */
-public class OWLlinkObjectPropertyHierarchyElementHandler extends AbstractOWLlinkHierarchyElementHandler<OWLObjectProperty> {
+public class AbstractOWLObjectPropertyElementHandler extends AbstractOWLlinkElementHandler<OWLObjectPropertyExpression> {
 
-    public OWLlinkObjectPropertyHierarchyElementHandler(MyOWLXMLParserHandler handler) {
+    private final OWLObjectPropertyExpression object;
+
+    public AbstractOWLObjectPropertyElementHandler(MyOWLXMLParserHandler handler, OWLObjectPropertyExpression object) {
         super(handler);
-    }
-
-    public void handleChild(OWLlinkObjectPropertySubPropertiesPairElementHandler handler) throws OWLXMLParserException {
-        super.pairs.add(handler.getOWLLinkObject());
-    }
-
-    public void handleChild(OWLlinkObjectPropertySynsetElementHandler handler) throws OWLXMLParserException {
-        super.unsatisfiables = handler.getOWLLinkObject();
+        this.object = object;
     }
 
     @Override
-    public Hierarchy<OWLObjectProperty> getOWLLinkObject() {
-        return new ObjectPropertyHierarchyImpl(super.pairs, super.unsatisfiables);
+    public OWLObjectPropertyExpression getOWLLinkObject() {
+        return this.object;
+    }
+
+    @Override
+    public OWLObjectPropertyExpression getOWLObject() {
+        return this.object;
+    }
+
+    @Override
+    public void endElement() throws OWLXMLParserException {
+        getParentHandler().handleChild(this);
     }
 }

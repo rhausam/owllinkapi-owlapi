@@ -39,31 +39,19 @@
 
 package org.semanticweb.owlapi.owllink.parser;
 
-import org.semanticweb.owlapi.model.OWLObjectProperty;
-import org.semanticweb.owlapi.owllink.builtin.response.Hierarchy;
-import org.semanticweb.owlapi.owllink.builtin.response.ObjectPropertyHierarchyImpl;
-
 /**
- * Created by IntelliJ IDEA.
- * Author: Olaf Noppens
- * Date: 02.11.2009
+ * Self-contained replacement for the (now package-private) OWL/XML
+ * attribute-not-found exception.
  */
-public class OWLlinkObjectPropertyHierarchyElementHandler extends AbstractOWLlinkHierarchyElementHandler<OWLObjectProperty> {
+public class OWLXMLParserAttributeNotFoundException extends OWLXMLParserException {
 
-    public OWLlinkObjectPropertyHierarchyElementHandler(MyOWLXMLParserHandler handler) {
-        super(handler);
+    private static final long serialVersionUID = 1L;
+
+    public OWLXMLParserAttributeNotFoundException(int lineNumber, int columnNumber, String attribute) {
+        super(lineNumber, columnNumber, "Expected attribute: " + attribute);
     }
 
-    public void handleChild(OWLlinkObjectPropertySubPropertiesPairElementHandler handler) throws OWLXMLParserException {
-        super.pairs.add(handler.getOWLLinkObject());
-    }
-
-    public void handleChild(OWLlinkObjectPropertySynsetElementHandler handler) throws OWLXMLParserException {
-        super.unsatisfiables = handler.getOWLLinkObject();
-    }
-
-    @Override
-    public Hierarchy<OWLObjectProperty> getOWLLinkObject() {
-        return new ObjectPropertyHierarchyImpl(super.pairs, super.unsatisfiables);
+    public OWLXMLParserAttributeNotFoundException(String message) {
+        super(message);
     }
 }

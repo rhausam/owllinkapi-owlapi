@@ -39,8 +39,6 @@
 
 package org.semanticweb.owlapi.owllink.parser;
 
-import org.coode.owlapi.owlxmlparser.OWLXMLParserException;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
 import org.semanticweb.owlapi.owllink.OWLlinkXMLVocabulary;
 import org.semanticweb.owlapi.owllink.builtin.response.BooleanResponse;
 import org.semanticweb.owlapi.owllink.builtin.response.BooleanResponseImpl;
@@ -53,7 +51,7 @@ import org.semanticweb.owlapi.owllink.builtin.response.BooleanResponseImpl;
 public class OWLlinkBooleanResponseElementHandler extends AbstractOWLlinkKBResponseElementHandler<BooleanResponse> {
     protected Boolean result;
 
-    public OWLlinkBooleanResponseElementHandler(OWLXMLParserHandler handler) {
+    public OWLlinkBooleanResponseElementHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 

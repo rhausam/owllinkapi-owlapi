@@ -39,8 +39,6 @@
 
 package org.semanticweb.owlapi.owllink.parser;
 
-import org.coode.owlapi.owlxmlparser.OWLXMLParserException;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.PrefixManager;
 import org.semanticweb.owlapi.owllink.KBRequest;
@@ -63,7 +61,7 @@ import org.semanticweb.owlapi.owllink.builtin.response.KBResponse;
  */
 public abstract class AbstractOWLlinkKBResponseElementHandler<R extends KBResponse> extends AbstractConfirmationElementHandler<R> {
 
-    public AbstractOWLlinkKBResponseElementHandler(OWLXMLParserHandler handler) {
+    public AbstractOWLlinkKBResponseElementHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 

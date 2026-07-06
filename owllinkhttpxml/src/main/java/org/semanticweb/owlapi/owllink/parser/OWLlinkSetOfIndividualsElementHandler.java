@@ -39,10 +39,6 @@
 
 package org.semanticweb.owlapi.owllink.parser;
 
-import org.coode.owlapi.owlxmlparser.OWLAnonymousIndividualElementHandler;
-import org.coode.owlapi.owlxmlparser.OWLIndividualElementHandler;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserException;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
 import org.semanticweb.owlapi.model.OWLIndividual;
 import org.semanticweb.owlapi.owllink.builtin.response.SetOfIndividuals;
 import org.semanticweb.owlapi.owllink.builtin.response.SetOfIndividualsImpl;
@@ -54,7 +50,7 @@ import org.semanticweb.owlapi.owllink.builtin.response.SetOfIndividualsImpl;
  */
 public class OWLlinkSetOfIndividualsElementHandler extends AbstractSetOfOWLObjectResponseElementHandler<OWLIndividual> {
 
-    public OWLlinkSetOfIndividualsElementHandler(OWLXMLParserHandler handler) {
+    public OWLlinkSetOfIndividualsElementHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 

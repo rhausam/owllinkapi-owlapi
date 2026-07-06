@@ -39,8 +39,6 @@
 
 package org.semanticweb.owlapi.owllink.parser;
 
-import org.coode.owlapi.owlxmlparser.OWLXMLParserException;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
 import org.semanticweb.owlapi.model.OWLLogicalEntity;
 import org.semanticweb.owlapi.owllink.builtin.response.HierarchyPair;
 import org.semanticweb.owlapi.owllink.builtin.response.HierarchyPairImpl;
@@ -57,7 +55,7 @@ public abstract class AbstractOWLlinkPairElementHandler<O extends OWLLogicalEnti
     protected SubEntitySynsets<O> subSetOfSynset;
 
 
-    public AbstractOWLlinkPairElementHandler(OWLXMLParserHandler handler) {
+    public AbstractOWLlinkPairElementHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 

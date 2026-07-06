@@ -39,7 +39,6 @@
 
 package org.semanticweb.owlapi.owllink.parser;
 
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
 import org.semanticweb.owlapi.owllink.builtin.response.OWLlinkDataRange;
 
 /**
@@ -50,7 +49,7 @@ import org.semanticweb.owlapi.owllink.builtin.response.OWLlinkDataRange;
  */
 public abstract class OWLlinkDataRangeElementHandler<D extends OWLlinkDataRange> extends AbstractOWLlinkElementHandler<D> {
 
-    public OWLlinkDataRangeElementHandler(OWLXMLParserHandler handler) {
+    public OWLlinkDataRangeElementHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 

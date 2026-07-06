@@ -39,8 +39,6 @@
 
 package org.semanticweb.owlapi.owllink.parser;
 
-import org.coode.owlapi.owlxmlparser.OWLXMLParserException;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
 import org.semanticweb.owlapi.owllink.builtin.response.IndividualSynset;
 import org.semanticweb.owlapi.owllink.builtin.response.SetOfIndividualSynsets;
 import org.semanticweb.owlapi.owllink.builtin.response.SetOfIndividualSynsetsImpl;
@@ -56,7 +54,7 @@ import java.util.Set;
 public class OWLlinkSetOfIndividualSynsetsElementHandler extends AbstractOWLlinkKBResponseElementHandler<SetOfIndividualSynsets> {
     private Set<IndividualSynset> synsets;
 
-    public OWLlinkSetOfIndividualSynsetsElementHandler(OWLXMLParserHandler handler) {
+    public OWLlinkSetOfIndividualSynsetsElementHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 

@@ -39,7 +39,6 @@
 
 package org.semanticweb.owlapi.owllink.parser;
 
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
 import org.semanticweb.owlapi.owllink.builtin.response.BooleanResponse;
 import org.semanticweb.owlapi.owllink.builtin.response.BooleanResponseImpl;
 
@@ -50,7 +49,7 @@ import org.semanticweb.owlapi.owllink.builtin.response.BooleanResponseImpl;
  */
 public class OWLlinkUnknownResponseElementHandler extends AbstractOWLlinkKBResponseElementHandler<BooleanResponse> {
 
-    public OWLlinkUnknownResponseElementHandler(OWLXMLParserHandler handler) {
+    public OWLlinkUnknownResponseElementHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 

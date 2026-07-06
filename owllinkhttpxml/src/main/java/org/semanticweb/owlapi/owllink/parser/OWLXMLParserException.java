@@ -39,31 +39,42 @@
 
 package org.semanticweb.owlapi.owllink.parser;
 
-import org.semanticweb.owlapi.model.OWLObjectProperty;
-import org.semanticweb.owlapi.owllink.builtin.response.Hierarchy;
-import org.semanticweb.owlapi.owllink.builtin.response.ObjectPropertyHierarchyImpl;
+import org.semanticweb.owlapi.io.OWLParserException;
 
 /**
- * Created by IntelliJ IDEA.
- * Author: Olaf Noppens
- * Date: 02.11.2009
+ * Self-contained replacement for the (now package-private) OWL/XML parser
+ * exception. It extends the public {@link OWLParserException} so that it can be
+ * caught wherever the driver catches parser exceptions.
  */
-public class OWLlinkObjectPropertyHierarchyElementHandler extends AbstractOWLlinkHierarchyElementHandler<OWLObjectProperty> {
+public class OWLXMLParserException extends OWLParserException {
 
-    public OWLlinkObjectPropertyHierarchyElementHandler(MyOWLXMLParserHandler handler) {
-        super(handler);
+    private static final long serialVersionUID = 1L;
+
+    public OWLXMLParserException(String message) {
+        super(message);
     }
 
-    public void handleChild(OWLlinkObjectPropertySubPropertiesPairElementHandler handler) throws OWLXMLParserException {
-        super.pairs.add(handler.getOWLLinkObject());
+    public OWLXMLParserException(String message, int lineNumber, int columnNumber) {
+        super(message, lineNumber, columnNumber);
     }
 
-    public void handleChild(OWLlinkObjectPropertySynsetElementHandler handler) throws OWLXMLParserException {
-        super.unsatisfiables = handler.getOWLLinkObject();
+    public OWLXMLParserException(int lineNumber, int columnNumber, String message) {
+        super(message, lineNumber, columnNumber);
     }
 
-    @Override
-    public Hierarchy<OWLObjectProperty> getOWLLinkObject() {
-        return new ObjectPropertyHierarchyImpl(super.pairs, super.unsatisfiables);
+    public OWLXMLParserException(int lineNumber, String message) {
+        super(message, lineNumber, -1);
+    }
+
+    public OWLXMLParserException(int lineNumber, Throwable cause) {
+        super(cause, lineNumber, -1);
+    }
+
+    public OWLXMLParserException(Throwable cause) {
+        super(cause);
+    }
+
+    public OWLXMLParserException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

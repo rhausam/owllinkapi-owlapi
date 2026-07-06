@@ -39,8 +39,6 @@
 
 package org.semanticweb.owlapi.owllink.parser;
 
-import org.coode.owlapi.owlxmlparser.OWLXMLParserException;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
 import org.semanticweb.owlapi.model.OWLLogicalEntity;
 import org.semanticweb.owlapi.owllink.builtin.response.Hierarchy;
 import org.semanticweb.owlapi.owllink.builtin.response.HierarchyPair;
@@ -58,7 +56,7 @@ public abstract class AbstractOWLlinkHierarchyElementHandler<O extends OWLLogica
     protected Set<HierarchyPair<O>> pairs;
     protected Node<O> unsatisfiables;
 
-    public AbstractOWLlinkHierarchyElementHandler(OWLXMLParserHandler handler) {
+    public AbstractOWLlinkHierarchyElementHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 

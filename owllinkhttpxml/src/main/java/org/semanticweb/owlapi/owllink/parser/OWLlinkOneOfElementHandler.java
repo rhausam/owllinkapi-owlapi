@@ -39,8 +39,6 @@
 
 package org.semanticweb.owlapi.owllink.parser;
 
-import org.coode.owlapi.owlxmlparser.OWLXMLParserException;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
 import org.semanticweb.owlapi.io.OWLParserException;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.owllink.builtin.response.OWLlinkLiteral;
@@ -59,7 +57,7 @@ public class OWLlinkOneOfElementHandler extends OWLlinkDataRangeElementHandler<O
     private IRI iri;
     Set<OWLlinkLiteral> literals;
 
-    public OWLlinkOneOfElementHandler(OWLXMLParserHandler handler) {
+    public OWLlinkOneOfElementHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 
