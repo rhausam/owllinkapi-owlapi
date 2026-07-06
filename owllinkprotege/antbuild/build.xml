@@ -59,38 +59,22 @@
     <property name="pluginsdir" value="${protegehomedir}/plugins"/>
 
 
-    <path id="osgi.libs">
-        <filelist dir="${osgilibdir}">
-            <file name="org.eclipse.equinox.common.jar"/>
-            <file name="org.eclipse.equinox.registry.jar"/>
-            <file name="org.eclipse.equinox.supplement.jar"/>
-        </filelist>
-    </path>
+    <!-- Protege editor + OWL API 4.5.29 dependencies now come from the project's
+         lib directory (Protege 5.x), not a local Protege 4.1 installation. -->
+    <property name="mainlibdir" value="${owllink-protege4.basedir}/../lib"/>
 
-    <path id="protege.core.libs">
-        <filelist dir="${protegecorelibdir}">
-            <file name="org.protege.common.jar"/>
-            <file name="org.protege.editor.core.application.jar"/>
-        </filelist>
-    </path>
-
-    <path id="protege.editor.libs">
-        <filelist dir="${pluginsdir}">
-            <file name="org.protege.editor.owl.jar"/>
-            <file name="org.semanticweb.owl.owlapi.jar"/>
-        </filelist>
-    </path>
-
-
-    <!-- For the classpath, we just use all of the libraries in the
-  lib directory -->
     <path id="owllink-protege4.classpath">
         <filelist dir="${owllink-protege4.libdir}">
             <file name="owllink-bin.jar"/>
         </filelist>
-        <path refid="osgi.libs"/>
-        <path refid="protege.core.libs"/>
-        <path refid="protege.editor.libs"/>
+        <filelist dir="${mainlibdir}">
+            <file name="owlapi-osgidistribution.jar"/>
+            <file name="guava-20.0.jar"/>
+            <file name="slf4j-api-2.0.11.jar"/>
+            <file name="jsr305-3.0.2.jar"/>
+            <file name="protege-editor-core-5.5.0.jar"/>
+            <file name="protege-editor-owl-5.5.0.jar"/>
+        </filelist>
     </path>
 
 

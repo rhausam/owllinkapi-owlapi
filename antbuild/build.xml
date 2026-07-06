@@ -170,13 +170,11 @@
 
     <target name="protegeplugin" >
 
-        <property name="owllink-protege4.basedir" value="unknown"/>
-
-        <subant target="compile-plugin">
+        <subant target="compile-plugin" inheritall="false">
             <fileset dir="../owllinkprotege/antbuild" includes="build.xml"/>
         </subant>
 
-         <subant target="bundle-plugin">
+         <subant target="bundle-plugin" inheritall="false">
             <fileset dir="../owllinkprotege/antbuild" includes="build.xml"/>
         </subant>
 
