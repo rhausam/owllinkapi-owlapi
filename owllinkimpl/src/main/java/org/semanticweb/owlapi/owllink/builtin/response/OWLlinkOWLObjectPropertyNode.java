@@ -53,8 +53,8 @@ import java.util.Set;
  * Date: 11.10.2010
  */
 public class OWLlinkOWLObjectPropertyNode extends DefaultNode<OWLObjectProperty> {
-    private static final OWLObjectProperty TOP_OBJECT_PROPERTY = OWLDataFactoryImpl.getInstance().getOWLTopObjectProperty();
-    private static final OWLObjectProperty BOTTOM_OBJECT_PROPERTY = OWLDataFactoryImpl.getInstance().getOWLBottomObjectProperty();
+    private static final OWLObjectProperty TOP_OBJECT_PROPERTY = new OWLDataFactoryImpl().getOWLTopObjectProperty();
+    private static final OWLObjectProperty BOTTOM_OBJECT_PROPERTY = new OWLDataFactoryImpl().getOWLBottomObjectProperty();
 
     public OWLlinkOWLObjectPropertyNode() {
     }

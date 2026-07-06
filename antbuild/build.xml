@@ -70,8 +70,7 @@
             <!--    <include name="*.jar"/>-->
             <file name="org.mortbay.jetty.jar"/>
             <file name="org.mortbay.jmx.jar"/>
-            <file name="owlapi-distribution-4.5.29.jar"/>
-            <file name="owlapi-bin.jar"/>
+            <file name="owlapi-osgidistribution.jar"/>
             <file name="xercesImpl.jar"/>
             <file name="xml-apis.jar"/>
         </filelist>

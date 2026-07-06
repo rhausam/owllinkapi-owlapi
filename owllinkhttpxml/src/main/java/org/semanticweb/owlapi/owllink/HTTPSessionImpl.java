@@ -39,8 +39,6 @@
 
 package org.semanticweb.owlapi.owllink;
 
-import org.apache.xml.serialize.OutputFormat;
-import org.apache.xml.serialize.XMLSerializer;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.owllink.builtin.response.OWLlinkErrorResponseException;
 import org.semanticweb.owlapi.owllink.builtin.response.ResponseMessage;
@@ -74,9 +72,6 @@ public class HTTPSessionImpl implements HTTPSession {
 
     private URL reasonerURL;
 
-    private XMLSerializer serializer;
-
-    private OutputFormat format;
     OWLOntologyManager manager;
     PrefixManagerProvider prov;
     private boolean serverAcceptsGzipEncoding = false;
@@ -89,16 +84,11 @@ public class HTTPSessionImpl implements HTTPSession {
 
     public HTTPSessionImpl(OWLOntologyManager manager, PrefixManagerProvider prov) throws MalformedURLException {
         this(manager, new URL("http://localhost:8080"), prov);
-        serializer = new XMLSerializer(format);
     }
 
     public HTTPSessionImpl(OWLOntologyManager manaager, URL reasonerURL, PrefixManagerProvider prov) {
         this.reasonerURL = reasonerURL;
         this.manager = manaager;
-        format = new OutputFormat();
-        format.setIndent(4);
-        format.setIndenting(true);
-        format.setPreserveSpace(false);
         this.prov = prov;
     }
 

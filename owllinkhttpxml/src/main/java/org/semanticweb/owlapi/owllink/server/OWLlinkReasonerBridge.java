@@ -49,7 +49,6 @@ import org.semanticweb.owlapi.owllink.Response;
 import org.semanticweb.owlapi.owllink.builtin.requests.*;
 import org.semanticweb.owlapi.owllink.builtin.response.*;
 import org.semanticweb.owlapi.owllink.retraction.RetractRequest;
-import org.semanticweb.owlapi.owllink.server.legacy.OWLReasonerLegacyBridge;
 import org.semanticweb.owlapi.owllink.server.parser.OWLLinkRequestListener;
 import org.semanticweb.owlapi.owllink.server.parser.OWLlinkXMLRequestParserHandler;
 import org.semanticweb.owlapi.owllink.server.renderer.OWLlinkXMLResponseRenderer;
@@ -252,10 +251,7 @@ public class OWLlinkReasonerBridge implements RequestVisitor {
     }
 
     protected String getWarning(OWLReasoner reasoner) {
-        if (reasoner instanceof OWLReasonerLegacyBridge)
-            return ((OWLReasonerLegacyBridge) reasoner).getWarning();
-            //todo incrementally inspect output stream in order to get reasoner output (e.g. err, stdout)
-        else {
+        {
             Stack<String> warnings = this.warningsByReasoners.get(reasoner);
             if (warnings == null) {
                 return null;
