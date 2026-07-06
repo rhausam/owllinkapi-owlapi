@@ -39,8 +39,8 @@
 
 package org.semanticweb.owlapi.owllink.server.parser;
 
-import org.coode.owlapi.owlxmlparser.OWLXMLParserException;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
+import org.semanticweb.owlapi.owllink.parser.OWLXMLParserException;
+import org.semanticweb.owlapi.owllink.parser.MyOWLXMLParserHandler;
 import org.semanticweb.owlapi.owllink.builtin.requests.GetDifferentIndividuals;
 
 /**
@@ -49,7 +49,7 @@ import org.semanticweb.owlapi.owllink.builtin.requests.GetDifferentIndividuals;
  */
 public class OWLlinkGetDifferentIndividualsElementHandler extends AbstractOWLIndividualElementHandler<GetDifferentIndividuals> {
 
-    public OWLlinkGetDifferentIndividualsElementHandler(OWLXMLParserHandler handler) {
+    public OWLlinkGetDifferentIndividualsElementHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 

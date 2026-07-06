@@ -39,9 +39,9 @@
 
 package org.semanticweb.owlapi.owllink.server.parser;
 
-import org.coode.owlapi.owlxmlparser.AbstractClassExpressionElementHandler;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserException;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
+import org.semanticweb.owlapi.owllink.parser.AbstractClassExpressionElementHandler;
+import org.semanticweb.owlapi.owllink.parser.OWLXMLParserException;
+import org.semanticweb.owlapi.owllink.parser.MyOWLXMLParserHandler;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.owllink.builtin.requests.GetSubClassHierarchy;
@@ -53,7 +53,7 @@ import org.semanticweb.owlapi.owllink.builtin.requests.GetSubClassHierarchy;
 public class OWLlinkGetSubClassHierarchyElementHandler extends AbstractOWLlinkKBRequestElementHandler<GetSubClassHierarchy> {
     protected OWLClass clazz;
 
-    public OWLlinkGetSubClassHierarchyElementHandler(OWLXMLParserHandler handler) {
+    public OWLlinkGetSubClassHierarchyElementHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 

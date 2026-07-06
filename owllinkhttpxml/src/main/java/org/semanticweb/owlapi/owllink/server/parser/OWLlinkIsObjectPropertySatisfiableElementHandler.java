@@ -39,9 +39,9 @@
 
 package org.semanticweb.owlapi.owllink.server.parser;
 
-import org.coode.owlapi.owlxmlparser.AbstractOWLObjectPropertyElementHandler;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserException;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
+import org.semanticweb.owlapi.owllink.parser.AbstractOWLObjectPropertyElementHandler;
+import org.semanticweb.owlapi.owllink.parser.OWLXMLParserException;
+import org.semanticweb.owlapi.owllink.parser.MyOWLXMLParserHandler;
 import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
 import org.semanticweb.owlapi.owllink.builtin.requests.IsObjectPropertySatisfiable;
 
@@ -52,7 +52,7 @@ import org.semanticweb.owlapi.owllink.builtin.requests.IsObjectPropertySatisfiab
 public class OWLlinkIsObjectPropertySatisfiableElementHandler extends AbstractOWLlinkKBRequestElementHandler<IsObjectPropertySatisfiable> {
     protected OWLObjectPropertyExpression property;
 
-    public OWLlinkIsObjectPropertySatisfiableElementHandler(OWLXMLParserHandler handler) {
+    public OWLlinkIsObjectPropertySatisfiableElementHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 

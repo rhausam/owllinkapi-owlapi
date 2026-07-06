@@ -39,10 +39,10 @@
 
 package org.semanticweb.owlapi.owllink.server.parser;
 
-import org.coode.owlapi.owlxmlparser.OWLAnonymousIndividualElementHandler;
-import org.coode.owlapi.owlxmlparser.OWLIndividualElementHandler;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserException;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
+import org.semanticweb.owlapi.owllink.parser.OWLAnonymousIndividualElementHandler;
+import org.semanticweb.owlapi.owllink.parser.OWLIndividualElementHandler;
+import org.semanticweb.owlapi.owllink.parser.OWLXMLParserException;
+import org.semanticweb.owlapi.owllink.parser.MyOWLXMLParserHandler;
 import org.semanticweb.owlapi.model.OWLIndividual;
 import org.semanticweb.owlapi.owllink.OWLlinkXMLVocabulary;
 import org.semanticweb.owlapi.owllink.builtin.requests.GetObjectPropertiesBetween;
@@ -56,7 +56,7 @@ public class OWLlinkGetObjectPropertiesBetweenElementHandler extends AbstractOWL
     protected OWLIndividual source;
     protected OWLIndividual target;
 
-    public OWLlinkGetObjectPropertiesBetweenElementHandler(OWLXMLParserHandler handler) {
+    public OWLlinkGetObjectPropertiesBetweenElementHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 

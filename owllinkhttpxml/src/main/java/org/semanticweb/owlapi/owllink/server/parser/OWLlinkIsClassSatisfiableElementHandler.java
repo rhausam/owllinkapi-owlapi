@@ -39,9 +39,9 @@
 
 package org.semanticweb.owlapi.owllink.server.parser;
 
-import org.coode.owlapi.owlxmlparser.AbstractClassExpressionElementHandler;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserException;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
+import org.semanticweb.owlapi.owllink.parser.AbstractClassExpressionElementHandler;
+import org.semanticweb.owlapi.owllink.parser.OWLXMLParserException;
+import org.semanticweb.owlapi.owllink.parser.MyOWLXMLParserHandler;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.owllink.builtin.requests.IsClassSatisfiable;
 
@@ -53,7 +53,7 @@ public class OWLlinkIsClassSatisfiableElementHandler extends AbstractOWLlinkKBRe
     OWLClassExpression expression;
 
 
-    public OWLlinkIsClassSatisfiableElementHandler(OWLXMLParserHandler handler) {
+    public OWLlinkIsClassSatisfiableElementHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 

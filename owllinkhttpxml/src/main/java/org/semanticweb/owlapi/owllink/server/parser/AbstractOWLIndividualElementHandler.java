@@ -39,10 +39,10 @@
 
 package org.semanticweb.owlapi.owllink.server.parser;
 
-import org.coode.owlapi.owlxmlparser.OWLAnonymousIndividualElementHandler;
-import org.coode.owlapi.owlxmlparser.OWLIndividualElementHandler;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserException;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
+import org.semanticweb.owlapi.owllink.parser.OWLAnonymousIndividualElementHandler;
+import org.semanticweb.owlapi.owllink.parser.OWLIndividualElementHandler;
+import org.semanticweb.owlapi.owllink.parser.OWLXMLParserException;
+import org.semanticweb.owlapi.owllink.parser.MyOWLXMLParserHandler;
 import org.semanticweb.owlapi.model.OWLIndividual;
 import org.semanticweb.owlapi.owllink.KBRequest;
 
@@ -61,7 +61,7 @@ public abstract class AbstractOWLIndividualElementHandler<R extends KBRequest> e
         super.o = handler.getOWLObject();
     }
 
-    public AbstractOWLIndividualElementHandler(OWLXMLParserHandler handler) {
+    public AbstractOWLIndividualElementHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 }

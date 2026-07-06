@@ -84,7 +84,7 @@ public class OWLlinkKBElementHandler extends AbstractOWLlinkResponseElementHandl
             else
                 manager.setPrefix(entry.getKey() + ":", entry.getValue());
         }
-        handler.prov.putPrefixes(kb, manager);
+        ((OWLlinkXMLParserHandler) handler).prov.putPrefixes(kb, manager);
         super.endElement();
     }
 }

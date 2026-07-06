@@ -122,7 +122,7 @@ public class OWLlinkGetEntitiesTestCase extends AbstractOWLlinkAxiomsTestCase {
         SetOfIndividuals answer = reasoner.answer(query);
         Set<OWLIndividual> individuals = CollectionFactory.createSet();
         individuals.addAll(getOntology().getIndividualsInSignature());
-        individuals.addAll(getOntology().getReferencedAnonymousIndividuals());
+        individuals.addAll(getOntology().getReferencedAnonymousIndividuals(org.semanticweb.owlapi.model.parameters.Imports.EXCLUDED));
         assertTrue(answer.containsAll(individuals));
         assertTrue(answer.size() == individuals.size());
     }

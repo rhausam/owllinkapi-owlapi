@@ -67,15 +67,15 @@ public abstract class AbstractOWLlinkKBResponseElementHandler<R extends KBRespon
 
     public void startElement(String s) throws OWLXMLParserException {
         super.startElement(s);
-        PrefixManagerProvider prefixProvider = handler.prov;
+        PrefixManagerProvider prefixProvider = ((OWLlinkXMLParserHandler) handler).prov;
         IRI kb = getRequest().getKB();
         PrefixManager prefixes = prefixProvider.getPrefixes(kb);
         handler.setPrefixName2PrefixMap(prefixes.getPrefixName2PrefixMap());
     }
 
     protected KBRequest getRequest() {
-        int index = handler.responseMessageHandler.getOWLLinkObject().size();
-        return (KBRequest) handler.getRequest(index);
+        int index = ((OWLlinkXMLParserHandler) handler).responseMessageHandler.getOWLLinkObject().size();
+        return (KBRequest) ((OWLlinkXMLParserHandler) handler).getRequest(index);
     }
 
 }

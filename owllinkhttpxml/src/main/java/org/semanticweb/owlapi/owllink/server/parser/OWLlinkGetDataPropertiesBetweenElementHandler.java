@@ -39,9 +39,9 @@
 
 package org.semanticweb.owlapi.owllink.server.parser;
 
-import org.coode.owlapi.owlxmlparser.OWLLiteralElementHandler;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserException;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
+import org.semanticweb.owlapi.owllink.parser.OWLLiteralElementHandler;
+import org.semanticweb.owlapi.owllink.parser.OWLXMLParserException;
+import org.semanticweb.owlapi.owllink.parser.MyOWLXMLParserHandler;
 import org.semanticweb.owlapi.model.OWLLiteral;
 import org.semanticweb.owlapi.owllink.OWLlinkXMLVocabulary;
 import org.semanticweb.owlapi.owllink.builtin.requests.GetDataPropertiesBetween;
@@ -54,7 +54,7 @@ public class OWLlinkGetDataPropertiesBetweenElementHandler extends AbstractOWLIn
     boolean isNegative = false;
     OWLLiteral literal;
 
-    public OWLlinkGetDataPropertiesBetweenElementHandler(OWLXMLParserHandler handler) {
+    public OWLlinkGetDataPropertiesBetweenElementHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 

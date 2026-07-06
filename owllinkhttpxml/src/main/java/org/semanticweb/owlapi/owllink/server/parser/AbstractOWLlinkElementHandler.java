@@ -39,21 +39,25 @@
 
 package org.semanticweb.owlapi.owllink.server.parser;
 
-import org.coode.owlapi.owlxmlparser.AbstractOWLElementHandler;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserException;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
+import org.semanticweb.owlapi.owllink.parser.MyOWLXMLParserHandler;
+import org.semanticweb.owlapi.owllink.parser.OWLXMLParserException;
 
 /**
  * Author: Olaf Noppens
  * Date: 25.10.2009
  */
-public abstract class AbstractOWLlinkElementHandler<O> extends AbstractOWLElementHandler<O> implements OWLlinkElementHandler<O> {
-    public AbstractOWLlinkElementHandler(OWLXMLParserHandler handler) {
+public abstract class AbstractOWLlinkElementHandler<O> extends org.semanticweb.owlapi.owllink.parser.AbstractOWLlinkElementHandler<O> implements OWLlinkElementHandler<O> {
+    public AbstractOWLlinkElementHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 
+    @Override
     protected OWLlinkElementHandler getParentHandler() {
         return (OWLlinkElementHandler) super.getParentHandler();
+    }
+
+    public O getOWLLinkObject() throws OWLXMLParserException {
+        return getOWLObject();
     }
 
     public void handleChild(OWLlinkRequestElementHandler handler) {

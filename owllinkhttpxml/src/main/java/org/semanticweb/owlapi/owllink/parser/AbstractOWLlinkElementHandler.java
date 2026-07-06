@@ -57,13 +57,13 @@ import org.semanticweb.owlapi.vocab.OWLXMLVocabulary;
  */
 public abstract class AbstractOWLlinkElementHandler<O> implements OWLlinkElementHandler<O> {
 
-    protected OWLlinkXMLParserHandler handler;
+    protected MyOWLXMLParserHandler handler;
     private OWLlinkElementHandler parentHandler;
     private final StringBuilder sb = new StringBuilder();
     private String elementName;
 
     public AbstractOWLlinkElementHandler(MyOWLXMLParserHandler handler) {
-        this.handler = (OWLlinkXMLParserHandler) handler;
+        this.handler = handler;
     }
 
     // --- lifecycle -------------------------------------------------------
@@ -141,8 +141,8 @@ public abstract class AbstractOWLlinkElementHandler<O> implements OWLlinkElement
     }
 
     protected Request getRequest() {
-        int index = handler.responseMessageHandler.getOWLLinkObject().size();
-        return handler.getRequest(index);
+        int index = ((OWLlinkXMLParserHandler) handler).responseMessageHandler.getOWLLinkObject().size();
+        return ((OWLlinkXMLParserHandler) handler).getRequest(index);
     }
 
     // --- default (empty) OWLlink double-dispatch handlers ----------------

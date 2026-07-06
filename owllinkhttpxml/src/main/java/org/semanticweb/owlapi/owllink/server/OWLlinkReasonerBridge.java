@@ -279,7 +279,7 @@ public class OWLlinkReasonerBridge implements RequestVisitor {
             if (((AxiomNotInProfileException) e).getAxiom() != null)
                 errorString.append("axiom: " + ((AxiomNotInProfileException) e).getAxiom());
             if (((AxiomNotInProfileException) e).getProfile() != null)
-                errorString.append("profile: " + ((AxiomNotInProfileException) e).getProfile().getName());
+                errorString.append("profile: " + ((AxiomNotInProfileException) e).getProfile());
             this.response = new ProfileViolationErrorResponseImpl(errorString.toString().isEmpty() ? e.toString() : errorString.toString());
         } else if (e instanceof KBException) {
             this.response = new KBErrorResponseImpl(e.getMessage() == null ? e.toString() : e.getMessage());

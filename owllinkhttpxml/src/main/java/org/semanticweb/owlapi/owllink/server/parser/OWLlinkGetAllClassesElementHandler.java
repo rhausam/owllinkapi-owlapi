@@ -39,8 +39,8 @@
 
 package org.semanticweb.owlapi.owllink.server.parser;
 
-import org.coode.owlapi.owlxmlparser.OWLXMLParserException;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
+import org.semanticweb.owlapi.owllink.parser.OWLXMLParserException;
+import org.semanticweb.owlapi.owllink.parser.MyOWLXMLParserHandler;
 import org.semanticweb.owlapi.owllink.builtin.requests.GetAllClasses;
 
 /**
@@ -49,7 +49,7 @@ import org.semanticweb.owlapi.owllink.builtin.requests.GetAllClasses;
  */
 public class OWLlinkGetAllClassesElementHandler extends AbstractOWLlinkKBRequestElementHandler<GetAllClasses> {
 
-    public OWLlinkGetAllClassesElementHandler(OWLXMLParserHandler handler) {
+    public OWLlinkGetAllClassesElementHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 
