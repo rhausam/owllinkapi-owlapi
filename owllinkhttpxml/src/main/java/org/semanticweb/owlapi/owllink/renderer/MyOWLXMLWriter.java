@@ -91,7 +91,11 @@ public class MyOWLXMLWriter extends org.semanticweb.owlapi.owlxml.renderer.OWLXM
     }
 
     public MyOWLXMLWriter(XMLWriter writer, OWLOntology ontology) {
-        super(null, null);
+        // In OWL API 4.x the OWLXMLWriter constructor eagerly builds an internal
+        // XMLWriter from the given Writer (and rejects null). This subclass overrides
+        // every output method to delegate to the wrapped OWLlink 'writer', so the
+        // superclass writer is never used - pass a throwaway to satisfy the ctor.
+        super(new java.io.StringWriter(), ontology);
         this.writer = writer;
     }
 
