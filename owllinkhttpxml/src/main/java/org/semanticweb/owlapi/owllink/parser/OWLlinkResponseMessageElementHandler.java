@@ -110,5 +110,14 @@ public class OWLlinkResponseMessageElementHandler extends AbstractOWLlinkElement
         handle(handler.getOWLLinkObject());
     }
 
+    /**
+     * The element handler interface declares an overload for the description handler, which is more
+     * specific than the one for response handlers, so without this the response of a GetDescription
+     * request would be dropped (the reasoner would have no name and no version).
+     */
+    public void handleChild(OWLlinkDescriptionElementHandler handler) throws OWLXMLParserException {
+        handle(handler.getOWLLinkObject());
+    }
+
 
 }
