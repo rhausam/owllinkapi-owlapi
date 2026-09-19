@@ -96,6 +96,8 @@ public class OWLlinkHTTPXMLReasonerInfo extends AbstractProtegeOWLReasonerInfo {
             } catch (MalformedURLException e1) {
             }
         }
-        return new OWLlinkReasonerConfiguration(monitor, reasonerURL, IndividualNodeSetPolicy.BY_SAME_AS);
+        // Protege asks the reasoner about classes that are not (yet) known to the server, e.g. for
+        // every class that is displayed, and like for its other reasoners it expects answers instead of errors
+        return new OWLlinkReasonerConfiguration(monitor, reasonerURL, FreshEntityPolicy.ALLOW, IndividualNodeSetPolicy.BY_SAME_AS);
     }
 }

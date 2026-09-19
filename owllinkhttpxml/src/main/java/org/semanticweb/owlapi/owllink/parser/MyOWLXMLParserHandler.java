@@ -93,6 +93,9 @@ public class MyOWLXMLParserHandler extends DefaultHandler {
     private int captureDepth;
     private StringBuilder fragment;
     private String captureRootLocalName;
+    private boolean captureHasChildren;
+    private String captureRootIRI;
+    private String captureRootAbbreviatedIRI;
 
     public MyOWLXMLParserHandler(OWLOntology ontology) {
         this(ontology, null);
@@ -191,6 +194,7 @@ public class MyOWLXMLParserHandler extends DefaultHandler {
             if (capturing) {
                 appendFragmentStart(localName, attributes);
                 captureDepth++;
+                captureHasChildren = true;
                 return;
             }
             if (isOWLXMLNamespace(uri) && localName.equals(OWLXMLVocabulary.PREFIX.getShortForm())) {
@@ -354,6 +358,9 @@ public class MyOWLXMLParserHandler extends DefaultHandler {
         this.capturing = true;
         this.captureDepth = 1;
         this.captureRootLocalName = localName;
+        this.captureHasChildren = false;
+        this.captureRootIRI = attributes.getValue(OWLXMLVocabulary.IRI_ATTRIBUTE.getShortForm());
+        this.captureRootAbbreviatedIRI = attributes.getValue(OWLXMLVocabulary.ABBREVIATED_IRI_ATTRIBUTE.getShortForm());
         appendFragmentStart(localName, attributes);
     }
 
@@ -410,11 +417,58 @@ public class MyOWLXMLParserHandler extends DefaultHandler {
         String frag = fragment.toString();
         fragment = null;
         OWLlinkElementHandler top = handlerStack.isEmpty() ? null : handlerStack.get(0);
-        AbstractOWLlinkElementHandler<?> shim = reparseFragment(captureRootLocalName, frag);
+        AbstractOWLlinkElementHandler<?> shim = null;
+        if (!captureHasChildren) {
+            shim = createNamedEntityHandler(captureRootLocalName, captureRootIRI, captureRootAbbreviatedIRI);
+        }
+        if (shim == null) {
+            shim = reparseFragment(captureRootLocalName, frag);
+        }
         if (shim != null) {
             shim.setParentHandler(top);
             shim.endElement();
         }
+    }
+
+    /**
+     * Fast path for a plain named entity such as {@code <owl:Class IRI="..."/>}, which
+     * is by far the most frequent embedded construct in OWLlink responses (a class
+     * hierarchy of a large ontology contains hundreds of thousands of them). The
+     * entity is created directly with the data factory instead of reparsing a
+     * synthetic OWL/XML document. Returns {@code null} if the element is not a plain
+     * named entity, in which case the fragment has to be reparsed.
+     */
+    private AbstractOWLlinkElementHandler<?> createNamedEntityHandler(String localName, String iriString,
+                                                                     String abbreviatedIRIString) throws OWLXMLParserException {
+        if (iriString == null && abbreviatedIRIString == null) {
+            return null;
+        }
+        OWLDataFactory df = getDataFactory();
+        IRI iri;
+        try {
+            iri = iriString != null ? getIRI(iriString) : getAbbreviatedIRI(abbreviatedIRIString);
+        } catch (OWLParserException e) {
+            return null;
+        }
+        if ("Class".equals(localName)) {
+            return new AbstractClassExpressionElementHandler(this, df.getOWLClass(iri));
+        }
+        if ("ObjectProperty".equals(localName)) {
+            return new AbstractOWLObjectPropertyElementHandler(this, df.getOWLObjectProperty(iri));
+        }
+        if ("DataProperty".equals(localName)) {
+            return new OWLDataPropertyElementHandler(this, df.getOWLDataProperty(iri));
+        }
+        if ("NamedIndividual".equals(localName)) {
+            return new OWLIndividualElementHandler(this, df.getOWLNamedIndividual(iri));
+        }
+        if ("AnnotationProperty".equals(localName)) {
+            return new OWLAnnotationPropertyElementHandler(this, df.getOWLAnnotationProperty(iri));
+        }
+        if ("Datatype".equals(localName)) {
+            return new AbstractOWLDataRangeHandler(this, df.getOWLDatatype(iri));
+        }
+        return null;
     }
 
     // --- element-name categories ----------------------------------------
