@@ -39,7 +39,7 @@
 
 package org.semanticweb.owlapi.owllink.renderer;
 
-import org.semanticweb.owlapi.util.EscapeUtils;
+import org.semanticweb.owlapi.io.XMLUtils;
 import org.semanticweb.owlapi.rdf.rdfxml.renderer.IllegalElementNameException;
 import org.semanticweb.owlapi.rdf.rdfxml.renderer.XMLWriter;
 import org.semanticweb.owlapi.rdf.rdfxml.renderer.XMLWriterNamespaceManager;
@@ -278,7 +278,7 @@ public class MyXMLWriterImpl implements XMLWriter {
             writer.write("    <!ENTITY ");
             writer.write(entity);
             writer.write(" \"");
-            entityVal = EscapeUtils.escapeString(entityVal);
+            entityVal = XMLUtils.escapeXML(entityVal);
             entityVal = entityVal.replace("%", PERCENT_ENTITY);
             writer.write(entityVal);
             writer.write("\" >\n");
@@ -447,9 +447,9 @@ public class MyXMLWriterImpl implements XMLWriter {
             writer.write('=');
             writer.write('"');
             if (XMLWriterPreferences.getInstance().isUseNamespaceEntities()) {
-                writer.write(swapForEntity(EscapeUtils.escapeString(val)));
+                writer.write(swapForEntity(XMLUtils.escapeXML(val)));
             } else {
-                writer.write(EscapeUtils.escapeString(val));
+                writer.write(XMLUtils.escapeXML(val));
             }
             writer.write('"');
         }
@@ -473,7 +473,7 @@ public class MyXMLWriterImpl implements XMLWriter {
 
         private void writeTextContent() throws IOException {
             if (textContent != null) {
-                writer.write(EscapeUtils.escapeString(textContent));
+                writer.write(XMLUtils.escapeXML(textContent));
             }
         }
 
