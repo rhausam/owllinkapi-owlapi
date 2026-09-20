@@ -68,6 +68,11 @@ import java.util.zip.InflaterInputStream;
  */
 public class HTTPSessionImpl implements HTTPSession {
     /**
+     * the XML declaration of a rendered request says UTF-8, so it must not be rendered with
+     * whatever the platform default happens to be
+     */
+    private static final String REQUEST_ENCODING = "UTF-8";
+    /**
      * threshold for using gzip, the value corresponds to characters not bytes.
      */
     private int gzipThreshold = 5000;
@@ -154,37 +159,43 @@ public class HTTPSessionImpl implements HTTPSession {
     public ResponseMessage performRequests(Request... request)  {
         OWLlinkXMLFactoryRegistry registry = OWLlinkXMLFactoryRegistry.getInstance();
         try {
-            //Handle the request
-            StringWriter writer = new StringWriter();
+            //Handle the request, rendered as the bytes that are sent: a Tell of a large ontology
+            //is hundreds of megabytes, and keeping it as characters and as a String as well used
+            //several times as much memory as the request itself
+            ByteArrayOutputStream renderedRequest = new ByteArrayOutputStream();
             OWLlinkXMLRenderer renderer = new OWLlinkXMLRenderer();
             renderer.addFactories(registry.getRequestRendererFactories());
 
+            Writer writer = new BufferedWriter(new OutputStreamWriter(renderedRequest, REQUEST_ENCODING));
             Request[] askedRequests = renderer.render(writer, prov, request);
+            writer.flush();
+
+            byte[] body = renderedRequest.toByteArray();
+            renderedRequest = null;
+            if (this.useCompression && this.serverAcceptsGzipEncoding() && body.length > getThresholdForCompressedContent()) {
+                ByteArrayOutputStream compressed = new ByteArrayOutputStream();
+                GZIPOutputStream gzip = new GZIPOutputStream(compressed);
+                gzip.write(body);
+                gzip.finish();
+                gzip.close();
+                body = compressed.toByteArray();
+            }
 
             HttpURLConnection conn = (HttpURLConnection) reasonerURL.openConnection();
             conn.setRequestProperty("Content-Type", "text/xml");
             conn.setRequestMethod("POST");
             conn.setDoInput(true);
             conn.setDoOutput(true);
-            StringBuffer buffer = writer.getBuffer();
-
-            conn.setRequestProperty("Content-Length", "" + buffer.length());   //todo length is wrong when compressing but we don't want to cache all the stuff in a buffer!
+            // without this the connection buffers the whole request again to determine its length
+            conn.setFixedLengthStreamingMode(body.length);
             conn.setRequestProperty("Accept-Encoding", "gzip, deflate");
             conn.connect();
 
-            OutputStream os;
-            if (this.useCompression && this.serverAcceptsGzipEncoding() && buffer.length() > getThresholdForCompressedContent()) {
-                os = new GZIPOutputStream(conn.getOutputStream());
-            } else {
-                os = conn.getOutputStream();
-            }
-            OutputStreamWriter osw = new OutputStreamWriter(os);
-            osw.write(buffer.toString());
-            if (os instanceof GZIPOutputStream) {
-                ((GZIPOutputStream) os).finish();
-            }
-            osw.flush();
-            osw.close();
+            OutputStream os = conn.getOutputStream();
+            os.write(body);
+            os.flush();
+            os.close();
+            body = null;
             if (!serverAcceptsGzipEncoding) {
                 Map map = conn.getHeaderFields();
                 if (map.containsKey("Accept-Encoding")) {
