@@ -188,7 +188,7 @@ public class OWLlinkHTTPXMLReasoner extends OWLReasonerBase implements OWLlinkRe
             if (cache != null && cache.contains(cls)) {
                 return cache.isSatisfiable(cls);
             }
-            if (cache != null || isFreshClass(cls)) {
+            if (isUnknownClass(cls)) {
                 // the server does not know the class and would answer with an error
                 checkFreshEntityPolicy(cls);
                 return true;
@@ -270,6 +270,13 @@ public class OWLlinkHTTPXMLReasoner extends OWLReasonerBase implements OWLlinkRe
     }
 
     public NodeSet<OWLClass> getDisjointClasses(OWLClassExpression ce) {
+        if (!ce.isAnonymous() && isUnknownClass(ce.asOWLClass())) {
+            // the server does not know the class and would answer with an error, only owl:Nothing is
+            // disjoint with a class it does not know
+            checkFreshEntityPolicy(ce.asOWLClass());
+            OWLlinkClassHierarchyCache cache = classHierarchyCache;
+            return new OWLClassNodeSet(cache != null ? cache.getBottomNode() : new OWLClassNode(getOWLDataFactory().getOWLNothing()));
+        }
         GetDisjointClasses query = new GetDisjointClasses(defaultKnowledgeBase, ce);
         return performRequestOWLAPI(query);
     }
@@ -403,6 +410,12 @@ public class OWLlinkHTTPXMLReasoner extends OWLReasonerBase implements OWLlinkRe
     }
 
     public NodeSet<OWLNamedIndividual> getInstances(OWLClassExpression ce, boolean direct) throws InconsistentOntologyException, ClassExpressionNotInProfileException, FreshEntitiesException, ReasonerInterruptedException, TimeOutException {
+        if (!ce.isAnonymous() && isUnknownClass(ce.asOWLClass())) {
+            // the server does not know the class and would answer with an error, a class it does not
+            // know has no instances
+            checkFreshEntityPolicy(ce.asOWLClass());
+            return new OWLNamedIndividualNodeSet();
+        }
         if (getIndividualNodeSetPolicy() == IndividualNodeSetPolicy.BY_NAME) {
             GetFlattenedInstances query = new GetFlattenedInstances(defaultKnowledgeBase, ce, direct);
             SetOfIndividuals individuals = performRequest(query);
@@ -548,6 +561,19 @@ public class OWLlinkHTTPXMLReasoner extends OWLReasonerBase implements OWLlinkRe
             changeCount.incrementAndGet();
             classHierarchyCache = null;
         }
+    }
+
+    /**
+     * @return true if the server cannot answer queries about the class because it does not occur in
+     *         the classified knowledge base, or, as long as the class hierarchy has not been
+     *         retrieved, not in the ontologies loaded into the reasoner
+     */
+    protected boolean isUnknownClass(OWLClass cls) {
+        OWLlinkClassHierarchyCache cache = classHierarchyCache;
+        if (cache != null) {
+            return !cache.contains(cls);
+        }
+        return isFreshClass(cls);
     }
 
     /**
