@@ -39,8 +39,6 @@
 
 package org.semanticweb.owlapi.owllink.parser;
 
-import org.coode.owlapi.owlxmlparser.OWLXMLParserException;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
 import org.semanticweb.owlapi.model.OWLDataProperty;
 import org.semanticweb.owlapi.owllink.builtin.response.DataPropertyHierarchyImpl;
 import org.semanticweb.owlapi.owllink.builtin.response.Hierarchy;
@@ -52,7 +50,7 @@ import org.semanticweb.owlapi.owllink.builtin.response.Hierarchy;
  */
 public class OWLlinkDataPropertyHierarchyElementHandler extends AbstractOWLlinkHierarchyElementHandler<OWLDataProperty> {
 
-    public OWLlinkDataPropertyHierarchyElementHandler(OWLXMLParserHandler handler) {
+    public OWLlinkDataPropertyHierarchyElementHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 

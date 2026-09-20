@@ -39,7 +39,6 @@
 
 package org.semanticweb.owlapi.owllink.parser;
 
-import org.coode.owlapi.owlxmlparser.OWLXMLParserElementNotFoundException;
 
 /**
  * Author: Olaf Noppens

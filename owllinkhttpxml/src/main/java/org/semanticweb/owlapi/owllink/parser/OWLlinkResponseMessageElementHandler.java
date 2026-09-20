@@ -39,7 +39,6 @@
 
 package org.semanticweb.owlapi.owllink.parser;
 
-import org.coode.owlapi.owlxmlparser.OWLXMLParserException;
 import org.semanticweb.owlapi.owllink.Response;
 
 import java.util.List;
@@ -108,6 +107,15 @@ public class OWLlinkResponseMessageElementHandler extends AbstractOWLlinkElement
     }
 
     public void handleChild(OWLlinkStringResponseElementHandler handler) {
+        handle(handler.getOWLLinkObject());
+    }
+
+    /**
+     * The element handler interface declares an overload for the description handler, which is more
+     * specific than the one for response handlers, so without this the response of a GetDescription
+     * request would be dropped (the reasoner would have no name and no version).
+     */
+    public void handleChild(OWLlinkDescriptionElementHandler handler) throws OWLXMLParserException {
         handle(handler.getOWLLinkObject());
     }
 

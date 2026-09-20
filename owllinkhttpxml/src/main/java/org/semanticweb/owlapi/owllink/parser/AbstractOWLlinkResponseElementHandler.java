@@ -39,8 +39,6 @@
 
 package org.semanticweb.owlapi.owllink.parser;
 
-import org.coode.owlapi.owlxmlparser.OWLXMLParserException;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
 import org.semanticweb.owlapi.owllink.Response;
 
 /**
@@ -50,7 +48,7 @@ import org.semanticweb.owlapi.owllink.Response;
  */
 public abstract class AbstractOWLlinkResponseElementHandler<R extends Response> extends AbstractOWLlinkElementHandler<R> implements OWLlinkResponseElementHandler<R> {
 
-    public AbstractOWLlinkResponseElementHandler(OWLXMLParserHandler handler) {
+    public AbstractOWLlinkResponseElementHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 

@@ -37,23 +37,37 @@
  * limitations under the License.
  */
 
-package org.semanticweb.owlapi.owllink.server.legacy;
+package org.semanticweb.owlapi.owllink.parser;
+
+import org.semanticweb.owlapi.model.OWLClassExpression;
 
 /**
- * Author: Olaf Noppens
- * Date: 20.02.2010
+ * Self-contained shim handler wrapping an embedded OWL/XML {@code OWLClassExpression}
+ * produced by the fragment-reparse driver. It keeps the same simple name as the
+ * former {@code org.coode.owlapi.owlxmlparser} handler so that consumer handlers
+ * need no import changes.
  */
-public class OWLUnsupportedQueryException extends OWLLegacyReasonerException {
+public class AbstractClassExpressionElementHandler extends AbstractOWLlinkElementHandler<OWLClassExpression> {
 
-    public OWLUnsupportedQueryException(String message) {
-        super(message);
+    private final OWLClassExpression object;
+
+    public AbstractClassExpressionElementHandler(MyOWLXMLParserHandler handler, OWLClassExpression object) {
+        super(handler);
+        this.object = object;
     }
 
-    public OWLUnsupportedQueryException(String message, Throwable cause) {
-        super(message, cause);
+    @Override
+    public OWLClassExpression getOWLLinkObject() {
+        return this.object;
     }
 
-    public OWLUnsupportedQueryException(Throwable cause) {
-        super(cause);
+    @Override
+    public OWLClassExpression getOWLObject() {
+        return this.object;
+    }
+
+    @Override
+    public void endElement() throws OWLXMLParserException {
+        getParentHandler().handleChild(this);
     }
 }

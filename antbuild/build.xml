@@ -70,8 +70,10 @@
             <!--    <include name="*.jar"/>-->
             <file name="org.mortbay.jetty.jar"/>
             <file name="org.mortbay.jmx.jar"/>
-            <file name="owlapi-distribution-4.5.29.jar"/>
-            <file name="owlapi-bin.jar"/>
+            <file name="owlapi-osgidistribution.jar"/>
+            <file name="guava-20.0.jar"/>
+            <file name="slf4j-api-2.0.11.jar"/>
+            <file name="jsr305-3.0.2.jar"/>
             <file name="xercesImpl.jar"/>
             <file name="xml-apis.jar"/>
         </filelist>
@@ -168,13 +170,11 @@
 
     <target name="protegeplugin" >
 
-        <property name="owllink-protege4.basedir" value="unknown"/>
-
-        <subant target="compile-plugin">
+        <subant target="compile-plugin" inheritall="false">
             <fileset dir="../owllinkprotege/antbuild" includes="build.xml"/>
         </subant>
 
-         <subant target="bundle-plugin">
+         <subant target="bundle-plugin" inheritall="false">
             <fileset dir="../owllinkprotege/antbuild" includes="build.xml"/>
         </subant>
 

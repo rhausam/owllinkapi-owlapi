@@ -40,10 +40,10 @@
 package org.semanticweb.owlapi.owllink.renderer;
 
 
-import org.coode.owlapi.owlxml.renderer.OWLXMLObjectRenderer;
-import org.coode.owlapi.owlxml.renderer.OWLXMLWriter;
-import org.coode.xml.XMLWriter;
-import org.coode.xml.XMLWriterNamespaceManager;
+import org.semanticweb.owlapi.owlxml.renderer.OWLXMLObjectRenderer;
+import org.semanticweb.owlapi.owlxml.renderer.OWLXMLWriter;
+import org.semanticweb.owlapi.rdf.rdfxml.renderer.XMLWriter;
+import org.semanticweb.owlapi.rdf.rdfxml.renderer.XMLWriterNamespaceManager;
 import org.semanticweb.owlapi.io.OWLRendererException;
 import org.semanticweb.owlapi.io.OWLRendererIOException;
 import org.semanticweb.owlapi.model.IRI;
@@ -85,11 +85,6 @@ public class OWLlinkXMLWriter {
                 } else
                     super.writeAttribute(attr, val);
             }
-
-            @Override
-            public void writeStartElement(String name) throws IOException {
-                super.writeStartElement(name);    //To change body of overridden methods use File | Settings | File Templates.
-            }
         };
         this.writer.setEncoding("UTF-8");
         OWLXMLWriter owlxmlWriter = new MyOWLXMLWriter(this.writer, null);
@@ -102,9 +97,9 @@ public class OWLlinkXMLWriter {
     public void startDocument(final boolean isRequest) throws OWLRendererException {
         try {
             if (isRequest)
-                writer.startDocument(OWLlinkXMLVocabulary.REQUEST_MESSAGE.toString());
+                writer.startDocument(IRI.create(OWLlinkXMLVocabulary.REQUEST_MESSAGE.toString()));
             else
-                writer.startDocument(OWLlinkXMLVocabulary.RESPONSE_MESSAGE.toString());
+                writer.startDocument(IRI.create(OWLlinkXMLVocabulary.RESPONSE_MESSAGE.toString()));
         }
         catch (IOException e) {
             throw new OWLRendererIOException(e);
@@ -127,7 +122,7 @@ public class OWLlinkXMLWriter {
 
     public void writeStartElement(URI name) {
         try {
-            writer.writeStartElement(name.toString());
+            writer.writeStartElement(IRI.create(name.toString()));
         }
         catch (IOException e) {
             throw new OWLRuntimeException(e);

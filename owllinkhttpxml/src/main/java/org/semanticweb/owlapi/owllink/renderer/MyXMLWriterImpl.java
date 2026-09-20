@@ -39,11 +39,12 @@
 
 package org.semanticweb.owlapi.owllink.renderer;
 
-import org.coode.string.EscapeUtils;
-import org.coode.xml.IllegalElementNameException;
-import org.coode.xml.XMLWriter;
-import org.coode.xml.XMLWriterNamespaceManager;
-import org.coode.xml.XMLWriterPreferences;
+import org.semanticweb.owlapi.io.XMLUtils;
+import org.semanticweb.owlapi.rdf.rdfxml.renderer.IllegalElementNameException;
+import org.semanticweb.owlapi.rdf.rdfxml.renderer.XMLWriter;
+import org.semanticweb.owlapi.rdf.rdfxml.renderer.XMLWriterNamespaceManager;
+import org.semanticweb.owlapi.rdf.rdfxml.renderer.XMLWriterPreferences;
+import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.vocab.OWL2Datatype;
 
 import java.io.IOException;
@@ -96,7 +97,10 @@ public class MyXMLWriterImpl implements XMLWriter {
 
 
     private void setupEntities() {
-        List<String> namespaces = new ArrayList<String>(xmlWriterNamespaceManager.getNamespaces());
+        List<String> namespaces = new ArrayList<String>();
+        for (String ns : xmlWriterNamespaceManager.getNamespaces()) {
+            namespaces.add(ns);
+        }
         Collections.sort(namespaces, new Comparator<String>() {
             public int compare(String o1, String o2) {
                 // Shortest string first
@@ -181,7 +185,15 @@ public class MyXMLWriterImpl implements XMLWriter {
     }
 
 
-    public void writeStartElement(String name) throws IOException {
+    public void writeStartElement(IRI name) throws IOException {
+        writeStartElement(name.toString());
+    }
+
+    public void writeAttribute(IRI attr, String val) {
+        writeAttribute(attr.toString(), val);
+    }
+
+    private void writeStartElement(String name) throws IOException {
         String qName = xmlWriterNamespaceManager.getQName(name);
         if (qName == null || qName.equals(name)) {
             if (!isValidQName(name)) {
@@ -266,7 +278,7 @@ public class MyXMLWriterImpl implements XMLWriter {
             writer.write("    <!ENTITY ");
             writer.write(entity);
             writer.write(" \"");
-            entityVal = EscapeUtils.escapeXML(entityVal);
+            entityVal = XMLUtils.escapeXML(entityVal);
             entityVal = entityVal.replace("%", PERCENT_ENTITY);
             writer.write(entityVal);
             writer.write("\" >\n");
@@ -275,7 +287,11 @@ public class MyXMLWriterImpl implements XMLWriter {
     }
 
 
-    public void startDocument(String rootElementName) throws IOException {
+    public void startDocument(IRI rootElement) throws IOException {
+        startDocument(rootElement.toString());
+    }
+
+    private void startDocument(String rootElementName) throws IOException {
         String encodingString = "";
         if (encoding.length() > 0) {
             encodingString = " encoding=\"" + encoding + "\"";
@@ -431,9 +447,9 @@ public class MyXMLWriterImpl implements XMLWriter {
             writer.write('=');
             writer.write('"');
             if (XMLWriterPreferences.getInstance().isUseNamespaceEntities()) {
-                writer.write(swapForEntity(EscapeUtils.escapeXML(val)));
+                writer.write(swapForEntity(XMLUtils.escapeXML(val)));
             } else {
-                writer.write(EscapeUtils.escapeXML(val));
+                writer.write(XMLUtils.escapeXML(val));
             }
             writer.write('"');
         }
@@ -457,7 +473,7 @@ public class MyXMLWriterImpl implements XMLWriter {
 
         private void writeTextContent() throws IOException {
             if (textContent != null) {
-                writer.write(EscapeUtils.escapeXML(textContent));
+                writer.write(XMLUtils.escapeXML(textContent));
             }
         }
 

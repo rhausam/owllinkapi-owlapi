@@ -39,13 +39,11 @@
 
 package org.semanticweb.owlapi.owllink.server.parser;
 
-import org.coode.owlapi.owlxmlparser.OWLElementHandler;
-
 /**
  * Author: Olaf Noppens
  * Date: 25.10.2009
  */
-public interface OWLlinkElementHandler<O> extends OWLElementHandler<O> {
+public interface OWLlinkElementHandler<O> extends org.semanticweb.owlapi.owllink.parser.OWLlinkElementHandler<O> {
 
     void handleChild(OWLlinkRequestElementHandler handler);
 

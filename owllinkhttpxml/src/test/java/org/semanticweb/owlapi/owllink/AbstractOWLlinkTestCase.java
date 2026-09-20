@@ -133,7 +133,7 @@ public abstract class AbstractOWLlinkTestCase extends TestCase {
     }
 
     public OWLLiteral getLiteral(int value) {
-        return getDataFactory().getOWLTypedLiteral(value);
+        return getDataFactory().getOWLLiteral(value);
     }
 
 

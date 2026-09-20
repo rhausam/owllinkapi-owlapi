@@ -39,13 +39,12 @@
 
 package org.semanticweb.owlapi.owllink.parser;
 
-import org.coode.owlapi.owlxmlparser.OWLElementHandlerFactory;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
-
 /**
+ * Self-contained factory for OWLlink element handlers.
  */
-public interface OWLlinkElementHandlerFactory extends OWLElementHandlerFactory {
+public interface OWLlinkElementHandlerFactory {
 
-    public OWLlinkElementHandler createHandler(OWLXMLParserHandler handler);
+    OWLlinkElementHandler createHandler(MyOWLXMLParserHandler handler);
 
+    String getElementName();
 }

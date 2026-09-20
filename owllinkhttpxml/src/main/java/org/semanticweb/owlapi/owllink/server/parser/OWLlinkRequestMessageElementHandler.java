@@ -39,8 +39,8 @@
 
 package org.semanticweb.owlapi.owllink.server.parser;
 
-import org.coode.owlapi.owlxmlparser.OWLXMLParserException;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
+import org.semanticweb.owlapi.owllink.parser.OWLXMLParserException;
+import org.semanticweb.owlapi.owllink.parser.MyOWLXMLParserHandler;
 import org.semanticweb.owlapi.owllink.Request;
 
 import java.util.List;
@@ -55,7 +55,7 @@ public class OWLlinkRequestMessageElementHandler extends AbstractOWLlinkElementH
     private List<Request> requests;
     private OWLLinkRequestListener listener;
 
-    public OWLlinkRequestMessageElementHandler(OWLXMLParserHandler handler) {
+    public OWLlinkRequestMessageElementHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 

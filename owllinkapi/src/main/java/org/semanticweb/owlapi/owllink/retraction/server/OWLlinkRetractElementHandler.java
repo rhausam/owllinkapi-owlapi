@@ -39,9 +39,9 @@
 
 package org.semanticweb.owlapi.owllink.retraction.server;
 
-import org.coode.owlapi.owlxmlparser.AbstractOWLAxiomElementHandler;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserException;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
+import org.semanticweb.owlapi.owllink.parser.AbstractOWLAxiomElementHandler;
+import org.semanticweb.owlapi.owllink.parser.OWLXMLParserException;
+import org.semanticweb.owlapi.owllink.parser.MyOWLXMLParserHandler;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.owllink.retraction.RetractRequest;
 import org.semanticweb.owlapi.owllink.server.parser.AbstractOWLlinkKBRequestElementHandler;
@@ -57,7 +57,7 @@ public class OWLlinkRetractElementHandler extends AbstractOWLlinkKBRequestElemen
 
     protected Set<OWLAxiom> axioms;
 
-    public OWLlinkRetractElementHandler(OWLXMLParserHandler handler) {
+    public OWLlinkRetractElementHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 

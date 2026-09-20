@@ -1,0 +1,6 @@
+# Build output
+antbuild/build/
+owllinkprotege/antbuild/build/
+owllinkprotege/antbuild/*.jar
+**/build/classes/
+*.class

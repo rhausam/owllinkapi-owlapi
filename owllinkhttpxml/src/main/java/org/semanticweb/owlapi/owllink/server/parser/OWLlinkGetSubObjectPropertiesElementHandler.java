@@ -39,8 +39,8 @@
 
 package org.semanticweb.owlapi.owllink.server.parser;
 
-import org.coode.owlapi.owlxmlparser.OWLXMLParserException;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
+import org.semanticweb.owlapi.owllink.parser.OWLXMLParserException;
+import org.semanticweb.owlapi.owllink.parser.MyOWLXMLParserHandler;
 import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
 import org.semanticweb.owlapi.owllink.OWLlinkXMLVocabulary;
 import org.semanticweb.owlapi.owllink.builtin.requests.GetSubObjectProperties;
@@ -52,7 +52,7 @@ import org.semanticweb.owlapi.owllink.builtin.requests.GetSubObjectProperties;
 public class OWLlinkGetSubObjectPropertiesElementHandler extends AbstractOWLPropertyRequestElementHandler<GetSubObjectProperties> {
     boolean direct = false;
 
-    public OWLlinkGetSubObjectPropertiesElementHandler(OWLXMLParserHandler handler) {
+    public OWLlinkGetSubObjectPropertiesElementHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 

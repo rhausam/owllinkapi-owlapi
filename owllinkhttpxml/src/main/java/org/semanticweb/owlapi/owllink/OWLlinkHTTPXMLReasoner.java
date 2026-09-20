@@ -40,6 +40,7 @@
 package org.semanticweb.owlapi.owllink;
 
 import org.semanticweb.owlapi.model.*;
+import org.semanticweb.owlapi.model.parameters.Imports;
 import org.semanticweb.owlapi.owllink.builtin.requests.*;
 import org.semanticweb.owlapi.owllink.builtin.response.*;
 import org.semanticweb.owlapi.owllink.retraction.RetractRequest;
@@ -51,6 +52,7 @@ import org.semanticweb.owlapi.util.Version;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * <code>OWLlinkHTTPXMLReasoner</code> is an implementation of <code>OWLlinkReasoner</code> that uses XML over
@@ -72,6 +74,19 @@ public class OWLlinkHTTPXMLReasoner extends OWLReasonerBase implements OWLlinkRe
     private URL reasonerURL;
     Description description;
     HTTPSessionImpl session;
+    /**
+     * local copy of the class hierarchy of the default knowledge base, null if the knowledge base
+     * has not been classified since the last change
+     */
+    private volatile OWLlinkClassHierarchyCache classHierarchyCache;
+    /**
+     * set if the class hierarchy could not be retrieved, class queries are then sent to the server
+     */
+    private volatile boolean classHierarchyRetrievalFailed;
+    /**
+     * incremented with every change, a hierarchy retrieved concurrently with a change is not used
+     */
+    private final AtomicLong changeCount = new AtomicLong();
 
     public OWLlinkHTTPXMLReasoner(OWLOntology rootOntology, OWLlinkReasonerConfiguration configuration, BufferingMode bufferingMode) {
         super(rootOntology, configuration, bufferingMode);
@@ -95,7 +110,11 @@ public class OWLlinkHTTPXMLReasoner extends OWLReasonerBase implements OWLlinkRe
     }
 
     public String getReasonerName() {
-        return this.description.getName();
+        if (this.description != null) {
+            return this.description.getName();
+        } else {
+            return null;
+        }
     }
 
     public Version getReasonerVersion() {
@@ -124,6 +143,7 @@ public class OWLlinkHTTPXMLReasoner extends OWLReasonerBase implements OWLlinkRe
 
     @Override
     protected void handleChanges(Set<OWLAxiom> addAxioms, Set<OWLAxiom> removeAxioms) {
+        invalidateClassHierarchy();
         if (removeAxioms.isEmpty()) {
             Tell tell = new Tell(defaultKnowledgeBase, addAxioms);
             performRequest(tell);
@@ -162,6 +182,18 @@ public class OWLlinkHTTPXMLReasoner extends OWLReasonerBase implements OWLlinkRe
     }
 
     public boolean isSatisfiable(OWLClassExpression classExpression) throws ReasonerInterruptedException, TimeOutException, ClassExpressionNotInProfileException, FreshEntitiesException, InconsistentOntologyException {
+        if (!classExpression.isAnonymous()) {
+            OWLClass cls = classExpression.asOWLClass();
+            OWLlinkClassHierarchyCache cache = classHierarchyCache;
+            if (cache != null && cache.contains(cls)) {
+                return cache.isSatisfiable(cls);
+            }
+            if (isUnknownClass(cls)) {
+                // the server does not know the class and would answer with an error
+                checkFreshEntityPolicy(cls);
+                return true;
+            }
+        }
         IsClassSatisfiable query = new IsClassSatisfiable(defaultKnowledgeBase, classExpression);
         return performRequestOWLAPI(query).getResult();
     }
@@ -190,6 +222,10 @@ public class OWLlinkHTTPXMLReasoner extends OWLReasonerBase implements OWLlinkRe
     }
 
     public Node<OWLClass> getTopClassNode() {
+        OWLlinkClassHierarchyCache cache = classHierarchyCache;
+        if (cache != null) {
+            return cache.getTopNode();
+        }
         final GetEquivalentClasses query = new GetEquivalentClasses(defaultKnowledgeBase, getOWLDataFactory().getOWLThing());
         final SetOfClasses classes = performRequest(query);
         final OWLClassNode node = new OWLClassNode();
@@ -204,23 +240,57 @@ public class OWLlinkHTTPXMLReasoner extends OWLReasonerBase implements OWLlinkRe
     }
 
     public NodeSet<OWLClass> getSubClasses(OWLClassExpression ce, boolean direct) {
+        OWLlinkClassHierarchyCache cache = classHierarchyCache;
+        if (cache != null && !ce.isAnonymous()) {
+            OWLClass cls = ce.asOWLClass();
+            if (cache.contains(cls)) {
+                return cache.getSubClasses(cls, direct);
+            }
+            checkFreshEntityPolicy(cls);
+            return new OWLClassNodeSet(cache.getBottomNode());
+        }
         GetSubClasses query = new GetSubClasses(defaultKnowledgeBase, ce, direct);
         SetOfClassSynsets result = performRequestOWLAPI(query);
         return result;
     }
 
     public NodeSet<OWLClass> getSuperClasses(OWLClassExpression ce, boolean direct) throws InconsistentOntologyException, ClassExpressionNotInProfileException, FreshEntitiesException, ReasonerInterruptedException, TimeOutException {
+        OWLlinkClassHierarchyCache cache = classHierarchyCache;
+        if (cache != null && !ce.isAnonymous()) {
+            OWLClass cls = ce.asOWLClass();
+            if (cache.contains(cls)) {
+                return cache.getSuperClasses(cls, direct);
+            }
+            checkFreshEntityPolicy(cls);
+            return new OWLClassNodeSet(cache.getTopNode());
+        }
         GetSuperClasses query = new GetSuperClasses(defaultKnowledgeBase, ce, direct);
         SetOfClassSynsets result = performRequestOWLAPI(query);
         return result;
     }
 
     public NodeSet<OWLClass> getDisjointClasses(OWLClassExpression ce) {
+        if (!ce.isAnonymous() && isUnknownClass(ce.asOWLClass())) {
+            // the server does not know the class and would answer with an error, only owl:Nothing is
+            // disjoint with a class it does not know
+            checkFreshEntityPolicy(ce.asOWLClass());
+            OWLlinkClassHierarchyCache cache = classHierarchyCache;
+            return new OWLClassNodeSet(cache != null ? cache.getBottomNode() : new OWLClassNode(getOWLDataFactory().getOWLNothing()));
+        }
         GetDisjointClasses query = new GetDisjointClasses(defaultKnowledgeBase, ce);
         return performRequestOWLAPI(query);
     }
 
     public Node<OWLClass> getEquivalentClasses(OWLClassExpression ce) throws InconsistentOntologyException, ClassExpressionNotInProfileException, FreshEntitiesException, ReasonerInterruptedException, TimeOutException {
+        OWLlinkClassHierarchyCache cache = classHierarchyCache;
+        if (cache != null && !ce.isAnonymous()) {
+            OWLClass cls = ce.asOWLClass();
+            if (cache.contains(cls)) {
+                return cache.getEquivalentClasses(cls);
+            }
+            checkFreshEntityPolicy(cls);
+            return new OWLClassNode(cls);
+        }
         GetEquivalentClasses query = new GetEquivalentClasses(defaultKnowledgeBase, ce);
         OWLClassNode node = new OWLClassNode();
         for (OWLClass clazz : performRequestOWLAPI(query))
@@ -230,6 +300,10 @@ public class OWLlinkHTTPXMLReasoner extends OWLReasonerBase implements OWLlinkRe
     }
 
     public Node<OWLClass> getUnsatisfiableClasses() throws ReasonerInterruptedException, TimeOutException {
+        OWLlinkClassHierarchyCache cache = classHierarchyCache;
+        if (cache != null) {
+            return cache.getBottomNode();
+        }
         return getEquivalentClasses(getOWLDataFactory().getOWLNothing());
     }
 
@@ -336,6 +410,12 @@ public class OWLlinkHTTPXMLReasoner extends OWLReasonerBase implements OWLlinkRe
     }
 
     public NodeSet<OWLNamedIndividual> getInstances(OWLClassExpression ce, boolean direct) throws InconsistentOntologyException, ClassExpressionNotInProfileException, FreshEntitiesException, ReasonerInterruptedException, TimeOutException {
+        if (!ce.isAnonymous() && isUnknownClass(ce.asOWLClass())) {
+            // the server does not know the class and would answer with an error, a class it does not
+            // know has no instances
+            checkFreshEntityPolicy(ce.asOWLClass());
+            return new OWLNamedIndividualNodeSet();
+        }
         if (getIndividualNodeSetPolicy() == IndividualNodeSetPolicy.BY_NAME) {
             GetFlattenedInstances query = new GetFlattenedInstances(defaultKnowledgeBase, ce, direct);
             SetOfIndividuals individuals = performRequest(query);
@@ -435,7 +515,7 @@ public class OWLlinkHTTPXMLReasoner extends OWLReasonerBase implements OWLlinkRe
     }
 
     public boolean isPrecomputed(InferenceType inferenceType) {
-        throw new OWLlinkUnsupportedMethodException();
+        return InferenceType.CLASS_HIERARCHY == inferenceType && classHierarchyCache != null;
     }
 
     public Set<InferenceType> getPrecomputableInferenceTypes() {
@@ -446,8 +526,86 @@ public class OWLlinkHTTPXMLReasoner extends OWLReasonerBase implements OWLlinkRe
     }
 
     public void classify() {
+        long changeCountBeforeClassification = changeCount.get();
         Classify classify = new Classify(defaultKnowledgeBase);
         performRequestOWLAPI(classify);
+        retrieveClassHierarchy(changeCountBeforeClassification);
+    }
+
+    /**
+     * Fetches the complete class hierarchy of the default knowledge base with one request, so that
+     * the class hierarchy queries of the OWLReasoner interface can be answered locally.
+     */
+    protected void retrieveClassHierarchy(long changeCountBeforeClassification) {
+        if (classHierarchyCache != null || classHierarchyRetrievalFailed) {
+            return;
+        }
+        try {
+            ClassHierarchy hierarchy = performRequestOWLAPI(new GetSubClassHierarchy(defaultKnowledgeBase));
+            OWLlinkClassHierarchyCache cache = new OWLlinkClassHierarchyCache(hierarchy, getOWLDataFactory());
+            synchronized (changeCount) {
+                if (changeCount.get() == changeCountBeforeClassification) {
+                    classHierarchyCache = cache;
+                }
+            }
+        } catch (InconsistentOntologyException e) {
+            throw e;
+        } catch (RuntimeException e) {
+            // e.g. a server without support for GetSubClassHierarchy, the queries are then sent one by one
+            classHierarchyRetrievalFailed = true;
+        }
+    }
+
+    protected void invalidateClassHierarchy() {
+        synchronized (changeCount) {
+            changeCount.incrementAndGet();
+            classHierarchyCache = null;
+        }
+    }
+
+    /**
+     * @return true if the server cannot answer queries about the class because it does not occur in
+     *         the classified knowledge base, or, as long as the class hierarchy has not been
+     *         retrieved, not in the ontologies loaded into the reasoner
+     */
+    protected boolean isUnknownClass(OWLClass cls) {
+        OWLlinkClassHierarchyCache cache = classHierarchyCache;
+        if (cache != null) {
+            return !cache.contains(cls);
+        }
+        return isFreshClass(cls);
+    }
+
+    /**
+     * @return true if the class does not occur in the ontologies loaded into the reasoner, the
+     *         server does not know such a class
+     */
+    protected boolean isFreshClass(OWLClass cls) {
+        return !cls.isBuiltIn() && !getRootOntology().containsClassInSignature(cls.getIRI(), Imports.INCLUDED);
+    }
+
+    protected void checkFreshEntityPolicy(OWLClass cls) throws FreshEntitiesException {
+        if (getFreshEntityPolicy() == FreshEntityPolicy.DISALLOW) {
+            throw new FreshEntitiesException(cls);
+        }
+    }
+
+    /**
+     * Also releases the default knowledge base on the server, otherwise every reasoner that is
+     * created and disposed (Protege does this each time the reasoner is restarted) leaves a
+     * knowledge base with the complete ontology behind in the server's memory.
+     */
+    @Override
+    public void dispose() {
+        invalidateClassHierarchy();
+        super.dispose();
+        if (defaultKnowledgeBase != null) {
+            try {
+                performRequest(new ReleaseKB(defaultKnowledgeBase));
+            } catch (RuntimeException e) {
+                // the server may not be reachable any more, nothing left to release then
+            }
+        }
     }
 
     public void realise() {

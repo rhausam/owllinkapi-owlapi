@@ -39,9 +39,6 @@
 
 package org.semanticweb.owlapi.owllink.parser;
 
-import org.coode.owlapi.owlxmlparser.AbstractOWLDataRangeHandler;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserException;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
 import org.semanticweb.owlapi.model.OWLDataRange;
 import org.semanticweb.owlapi.model.OWLDatatype;
 import org.semanticweb.owlapi.owllink.builtin.response.SetOfDatatypes;
@@ -54,7 +51,7 @@ import org.semanticweb.owlapi.owllink.builtin.response.SetOfDatatypesImpl;
  */
 public class OWLlinkSetOfDatatypesElementHandler extends AbstractSetOfOWLObjectResponseElementHandler<OWLDatatype> {
 
-    public OWLlinkSetOfDatatypesElementHandler(OWLXMLParserHandler handler) {
+    public OWLlinkSetOfDatatypesElementHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 

@@ -39,8 +39,6 @@
 
 package org.semanticweb.owlapi.owllink.parser;
 
-import org.coode.owlapi.owlxmlparser.OWLXMLParserException;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.owllink.builtin.response.Prefixes;
 import org.semanticweb.owlapi.owllink.builtin.response.PrefixesImpl;
@@ -57,7 +55,7 @@ import java.util.Map;
 public class OWLlinkPrefixesElementHandler extends AbstractOWLlinkKBResponseElementHandler<Prefixes> {
     protected Map<String, String> mapping;
 
-    public OWLlinkPrefixesElementHandler(OWLXMLParserHandler handler) {
+    public OWLlinkPrefixesElementHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 
@@ -87,6 +85,6 @@ public class OWLlinkPrefixesElementHandler extends AbstractOWLlinkKBResponseElem
             else
                 prefixes.setPrefix(entry.getKey() + ":", entry.getValue());
         }
-        handler.prov.putPrefixes(kb, prefixes);
+        ((OWLlinkXMLParserHandler) handler).prov.putPrefixes(kb, prefixes);
     }
 }

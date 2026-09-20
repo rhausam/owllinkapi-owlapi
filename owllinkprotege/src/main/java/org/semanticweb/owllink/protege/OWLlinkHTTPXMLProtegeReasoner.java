@@ -42,7 +42,6 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.owllink.OWLlinkHTTPXMLReasoner;
 import org.semanticweb.owlapi.owllink.OWLlinkReasonerConfiguration;
 import org.semanticweb.owlapi.reasoner.BufferingMode;
-import org.semanticweb.owlapi.reasoner.InferenceType;
 
 /**
  * Author: Olaf Noppens
@@ -53,10 +52,5 @@ public class OWLlinkHTTPXMLProtegeReasoner extends OWLlinkHTTPXMLReasoner {
 
     public OWLlinkHTTPXMLProtegeReasoner(OWLOntology rootOntology, OWLlinkReasonerConfiguration configuration, BufferingMode bufferingMode) {
         super(rootOntology, configuration, bufferingMode);
-    }
-
-    @Override
-    public boolean isPrecomputed(InferenceType inferenceType) {
-        return false;
     }
 }

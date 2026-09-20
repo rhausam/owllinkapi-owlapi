@@ -39,9 +39,9 @@
 
 package org.semanticweb.owlapi.owllink.server.parser;
 
-import org.coode.owlapi.owlxmlparser.OWLLiteralElementHandler;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserException;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
+import org.semanticweb.owlapi.owllink.parser.OWLLiteralElementHandler;
+import org.semanticweb.owlapi.owllink.parser.OWLXMLParserException;
+import org.semanticweb.owlapi.owllink.parser.MyOWLXMLParserHandler;
 import org.semanticweb.owlapi.model.OWLLiteral;
 import org.semanticweb.owlapi.owllink.OWLlinkXMLVocabulary;
 import org.semanticweb.owlapi.owllink.builtin.requests.GetFlattenedDataPropertySources;
@@ -54,7 +54,7 @@ public class OWLlinkGetFlattenedDataPropertySourcesElementHandler extends Abstra
     protected boolean isNegative = false;
     protected OWLLiteral literal;
 
-    public OWLlinkGetFlattenedDataPropertySourcesElementHandler(OWLXMLParserHandler handler) {
+    public OWLlinkGetFlattenedDataPropertySourcesElementHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 

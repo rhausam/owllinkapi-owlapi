@@ -39,9 +39,9 @@
 
 package org.semanticweb.owlapi.owllink.server.parser;
 
-import org.coode.owlapi.owlxmlparser.AbstractOWLAxiomElementHandler;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserException;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
+import org.semanticweb.owlapi.owllink.parser.AbstractOWLAxiomElementHandler;
+import org.semanticweb.owlapi.owllink.parser.OWLXMLParserException;
+import org.semanticweb.owlapi.owllink.parser.MyOWLXMLParserHandler;
 import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.owllink.builtin.requests.IsEntailedDirect;
 
@@ -52,7 +52,7 @@ import org.semanticweb.owlapi.owllink.builtin.requests.IsEntailedDirect;
 public class OWLlinkIsEntailedDirectElementHandler extends AbstractOWLlinkKBRequestElementHandler<IsEntailedDirect> {
     protected OWLAxiom axiom;
 
-    public OWLlinkIsEntailedDirectElementHandler(OWLXMLParserHandler handler) {
+    public OWLlinkIsEntailedDirectElementHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 

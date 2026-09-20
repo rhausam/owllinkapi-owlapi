@@ -39,10 +39,10 @@
 
 package org.semanticweb.owlapi.owllink.server.parser;
 
-import org.coode.owlapi.owlxmlparser.AbstractOWLObjectPropertyElementHandler;
-import org.coode.owlapi.owlxmlparser.OWLDataPropertyElementHandler;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserException;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
+import org.semanticweb.owlapi.owllink.parser.AbstractOWLObjectPropertyElementHandler;
+import org.semanticweb.owlapi.owllink.parser.OWLDataPropertyElementHandler;
+import org.semanticweb.owlapi.owllink.parser.OWLXMLParserException;
+import org.semanticweb.owlapi.owllink.parser.MyOWLXMLParserHandler;
 import org.semanticweb.owlapi.model.OWLPropertyExpression;
 import org.semanticweb.owlapi.owllink.KBRequest;
 
@@ -54,7 +54,7 @@ import org.semanticweb.owlapi.owllink.KBRequest;
 public abstract class AbstractOWLPropertyRequestElementHandler<R extends KBRequest> extends
         AbstractOWLlinkObjectRequestElementHandler<R, OWLPropertyExpression> {
 
-    public AbstractOWLPropertyRequestElementHandler(OWLXMLParserHandler handler) {
+    public AbstractOWLPropertyRequestElementHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 

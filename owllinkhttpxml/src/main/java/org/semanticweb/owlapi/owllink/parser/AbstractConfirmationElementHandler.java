@@ -39,8 +39,6 @@
 
 package org.semanticweb.owlapi.owllink.parser;
 
-import org.coode.owlapi.owlxmlparser.OWLXMLParserException;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
 import org.semanticweb.owlapi.owllink.OWLlinkXMLVocabulary;
 import org.semanticweb.owlapi.owllink.builtin.response.Confirmation;
 
@@ -52,7 +50,7 @@ import org.semanticweb.owlapi.owllink.builtin.response.Confirmation;
 public abstract class AbstractConfirmationElementHandler<C extends Confirmation> extends AbstractOWLlinkResponseElementHandler<C> implements OWLlinkResponseElementHandler<C> {
     String warning;
 
-    public AbstractConfirmationElementHandler(OWLXMLParserHandler handler) {
+    public AbstractConfirmationElementHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 

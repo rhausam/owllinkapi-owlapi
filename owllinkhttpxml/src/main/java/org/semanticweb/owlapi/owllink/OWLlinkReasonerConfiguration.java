@@ -62,7 +62,11 @@ public class OWLlinkReasonerConfiguration extends SimpleConfiguration {
 
 
     public OWLlinkReasonerConfiguration(ReasonerProgressMonitor progressMonitor, URL reasonerURL, IndividualNodeSetPolicy individualNodeSetPolicy) {
-        super(progressMonitor, FreshEntityPolicy.DISALLOW, Long.MAX_VALUE, individualNodeSetPolicy);
+        this(progressMonitor, reasonerURL, FreshEntityPolicy.DISALLOW, individualNodeSetPolicy);
+    }
+
+    public OWLlinkReasonerConfiguration(ReasonerProgressMonitor progressMonitor, URL reasonerURL, FreshEntityPolicy freshEntityPolicy, IndividualNodeSetPolicy individualNodeSetPolicy) {
+        super(progressMonitor, freshEntityPolicy, Long.MAX_VALUE, individualNodeSetPolicy);
         this.reasonerURL = reasonerURL;
     }
 

@@ -39,8 +39,6 @@
 
 package org.semanticweb.owlapi.owllink.parser;
 
-import org.coode.owlapi.owlxmlparser.OWLXMLParserException;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
 import org.semanticweb.owlapi.model.OWLLogicalEntity;
 import org.semanticweb.owlapi.reasoner.Node;
 
@@ -54,7 +52,7 @@ import java.util.Set;
 public abstract class AbstractOWLlinkEntitySynsetElementHandler<S extends OWLLogicalEntity> extends AbstractOWLlinkElementHandler<Node<S>> {
     protected Set<S> elements;
 
-    public AbstractOWLlinkEntitySynsetElementHandler(OWLXMLParserHandler handler) {
+    public AbstractOWLlinkEntitySynsetElementHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 

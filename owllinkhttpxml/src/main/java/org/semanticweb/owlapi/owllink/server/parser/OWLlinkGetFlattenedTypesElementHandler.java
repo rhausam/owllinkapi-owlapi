@@ -39,8 +39,8 @@
 
 package org.semanticweb.owlapi.owllink.server.parser;
 
-import org.coode.owlapi.owlxmlparser.OWLXMLParserException;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
+import org.semanticweb.owlapi.owllink.parser.OWLXMLParserException;
+import org.semanticweb.owlapi.owllink.parser.MyOWLXMLParserHandler;
 import org.semanticweb.owlapi.owllink.builtin.requests.GetFlattenedTypes;
 
 /**
@@ -50,7 +50,7 @@ import org.semanticweb.owlapi.owllink.builtin.requests.GetFlattenedTypes;
 public class OWLlinkGetFlattenedTypesElementHandler extends AbstractOWLIndividualElementHandler<GetFlattenedTypes> {
     boolean isDirect = false;
 
-    public OWLlinkGetFlattenedTypesElementHandler(OWLXMLParserHandler handler) {
+    public OWLlinkGetFlattenedTypesElementHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 

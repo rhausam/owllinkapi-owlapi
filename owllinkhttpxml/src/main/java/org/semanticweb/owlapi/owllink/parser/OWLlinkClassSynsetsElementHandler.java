@@ -39,8 +39,6 @@
 
 package org.semanticweb.owlapi.owllink.parser;
 
-import org.coode.owlapi.owlxmlparser.OWLXMLParserException;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.owllink.builtin.response.ClassSynsets;
 import org.semanticweb.owlapi.owllink.builtin.response.ClassSynsetsImpl;
@@ -52,7 +50,7 @@ import org.semanticweb.owlapi.owllink.builtin.response.ClassSynsetsImpl;
  */
 public class OWLlinkClassSynsetsElementHandler extends AbstractOWLlinkEntitySynsetsElementHandler<OWLClass> {
 
-    public OWLlinkClassSynsetsElementHandler(OWLXMLParserHandler handler) {
+    public OWLlinkClassSynsetsElementHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 

@@ -39,7 +39,6 @@
 
 package org.semanticweb.owlapi.owllink.parser;
 
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
 import org.semanticweb.owlapi.owllink.builtin.response.OWLlinkKBErrorResponseException;
 
 /**
@@ -48,7 +47,7 @@ import org.semanticweb.owlapi.owllink.builtin.response.OWLlinkKBErrorResponseExc
  */
 public class OWLlinkKBErrorElementHandler extends AbstractOWLlinkErrorHandler<OWLlinkKBErrorResponseException> {
 
-    public OWLlinkKBErrorElementHandler(OWLXMLParserHandler handler) {
+    public OWLlinkKBErrorElementHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 

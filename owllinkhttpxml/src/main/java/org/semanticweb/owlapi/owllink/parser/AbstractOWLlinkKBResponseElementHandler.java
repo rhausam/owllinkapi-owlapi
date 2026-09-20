@@ -39,8 +39,6 @@
 
 package org.semanticweb.owlapi.owllink.parser;
 
-import org.coode.owlapi.owlxmlparser.OWLXMLParserException;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.PrefixManager;
 import org.semanticweb.owlapi.owllink.KBRequest;
@@ -63,21 +61,21 @@ import org.semanticweb.owlapi.owllink.builtin.response.KBResponse;
  */
 public abstract class AbstractOWLlinkKBResponseElementHandler<R extends KBResponse> extends AbstractConfirmationElementHandler<R> {
 
-    public AbstractOWLlinkKBResponseElementHandler(OWLXMLParserHandler handler) {
+    public AbstractOWLlinkKBResponseElementHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 
     public void startElement(String s) throws OWLXMLParserException {
         super.startElement(s);
-        PrefixManagerProvider prefixProvider = handler.prov;
+        PrefixManagerProvider prefixProvider = ((OWLlinkXMLParserHandler) handler).prov;
         IRI kb = getRequest().getKB();
         PrefixManager prefixes = prefixProvider.getPrefixes(kb);
         handler.setPrefixName2PrefixMap(prefixes.getPrefixName2PrefixMap());
     }
 
     protected KBRequest getRequest() {
-        int index = handler.responseMessageHandler.getOWLLinkObject().size();
-        return (KBRequest) handler.getRequest(index);
+        int index = ((OWLlinkXMLParserHandler) handler).responseMessageHandler.getOWLLinkObject().size();
+        return (KBRequest) ((OWLlinkXMLParserHandler) handler).getRequest(index);
     }
 
 }

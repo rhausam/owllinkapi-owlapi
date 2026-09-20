@@ -37,21 +37,21 @@
  * limitations under the License.
  */
 
-package org.semanticweb.owlapi.owllink.server.legacy;
-
-import org.semanticweb.owlapi.reasoner.*;
+package org.semanticweb.owlapi.owllink.parser;
 
 /**
- * Author: Olaf Noppens
- * Date: 20.02.2010
+ * Self-contained replacement for the (now package-private) OWL/XML
+ * attribute-not-found exception.
  */
-public class LegacyConfiguration extends SimpleConfiguration {
+public class OWLXMLParserAttributeNotFoundException extends OWLXMLParserException {
 
-    public LegacyConfiguration(ReasonerProgressMonitor progressMonitor) {
-        super(progressMonitor, FreshEntityPolicy.DISALLOW, Long.MAX_VALUE, IndividualNodeSetPolicy.BY_NAME);
+    private static final long serialVersionUID = 1L;
+
+    public OWLXMLParserAttributeNotFoundException(int lineNumber, int columnNumber, String attribute) {
+        super(lineNumber, columnNumber, "Expected attribute: " + attribute);
     }
 
-    public LegacyConfiguration() {
-        this(new NullReasonerProgressMonitor());
+    public OWLXMLParserAttributeNotFoundException(String message) {
+        super(message);
     }
 }

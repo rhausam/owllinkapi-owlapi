@@ -39,8 +39,8 @@
 
 package org.semanticweb.owlapi.owllink.server.parser;
 
-import org.coode.owlapi.owlxmlparser.OWLXMLParserException;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
+import org.semanticweb.owlapi.owllink.parser.OWLXMLParserException;
+import org.semanticweb.owlapi.owllink.parser.MyOWLXMLParserHandler;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.owllink.OWLlinkXMLVocabulary;
 
@@ -56,7 +56,7 @@ public class OWLlinkPrefixElementHandler extends AbstractOWLlinkElementHandler<O
         return new Prefix(name, iri);
     }
 
-    public OWLlinkPrefixElementHandler(OWLXMLParserHandler handler) {
+    public OWLlinkPrefixElementHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 

@@ -39,13 +39,39 @@
 
 package org.semanticweb.owlapi.owllink.parser;
 
-import org.coode.owlapi.owlxmlparser.OWLElementHandler;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserException;
+import org.semanticweb.owlapi.io.OWLParserException;
 
 /**
- *
+ * Self-contained element handler interface for the OWLlink SAX parser.
+ * <p/>
+ * This no longer depends on the (now sealed / package-private) OWL/XML
+ * element-handler framework of the OWL API. It declares the small lifecycle
+ * contract required by the driver plus the double-dispatch
+ * {@code handleChild(...)} overloads used by the concrete handlers.
  */
-public interface OWLlinkElementHandler<O> extends OWLElementHandler<O> {
+public interface OWLlinkElementHandler<O> {
+
+    // --- lifecycle -------------------------------------------------------
+
+    void setParentHandler(OWLlinkElementHandler handler);
+
+    void startElement(String name) throws OWLXMLParserException;
+
+    void attribute(String localName, String value) throws OWLParserException;
+
+    void endElement() throws OWLXMLParserException;
+
+    void handleChars(char[] chars, int start, int length);
+
+    boolean isTextContentPossible();
+
+    String getElementName();
+
+    O getOWLObject() throws OWLXMLParserException;
+
+    O getOWLLinkObject() throws OWLXMLParserException;
+
+    // --- OWLlink double-dispatch overloads -------------------------------
 
     void handleChild(OWLlinkElementHandler handler) throws OWLXMLParserException;
 
@@ -82,7 +108,6 @@ public interface OWLlinkElementHandler<O> extends OWLElementHandler<O> {
 
     void handleChild(OWLlinkIndividualSynsetElementHandler handler) throws OWLXMLParserException;
 
-
     void handleChild(OWLlinkClassSubClassesPairElementHandler handler) throws OWLXMLParserException;
 
     void handleChild(OWLlinkObjectPropertySubPropertiesPairElementHandler handler) throws OWLXMLParserException;
@@ -97,6 +122,31 @@ public interface OWLlinkElementHandler<O> extends OWLElementHandler<O> {
 
     void handleChild(OWLlinkResponseMessageElementHandler handler) throws OWLXMLParserException;
 
-    O getOWLLinkObject() throws OWLXMLParserException;
+    void handleChild(OWLlinkBooleanResponseElementHandler handler) throws OWLXMLParserException;
 
+    void handleChild(OWLlinkStringResponseElementHandler handler) throws OWLXMLParserException;
+
+    void handleChild(OWLlinkDescriptionElementHandler handler) throws OWLXMLParserException;
+
+    // --- OWL/XML shim double-dispatch overloads --------------------------
+    // These correspond to the embedded OWL/XML constructs produced by the
+    // fragment-reparse driver.
+
+    void handleChild(AbstractOWLAxiomElementHandler handler) throws OWLXMLParserException;
+
+    void handleChild(AbstractClassExpressionElementHandler handler) throws OWLXMLParserException;
+
+    void handleChild(AbstractOWLObjectPropertyElementHandler handler) throws OWLXMLParserException;
+
+    void handleChild(AbstractOWLDataRangeHandler handler) throws OWLXMLParserException;
+
+    void handleChild(OWLDataPropertyElementHandler handler) throws OWLXMLParserException;
+
+    void handleChild(OWLIndividualElementHandler handler) throws OWLXMLParserException;
+
+    void handleChild(OWLAnonymousIndividualElementHandler handler) throws OWLXMLParserException;
+
+    void handleChild(OWLLiteralElementHandler handler) throws OWLXMLParserException;
+
+    void handleChild(OWLAnnotationPropertyElementHandler handler) throws OWLXMLParserException;
 }

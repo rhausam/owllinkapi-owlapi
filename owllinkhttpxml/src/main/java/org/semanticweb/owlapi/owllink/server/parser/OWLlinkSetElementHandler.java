@@ -39,8 +39,8 @@
 
 package org.semanticweb.owlapi.owllink.server.parser;
 
-import org.coode.owlapi.owlxmlparser.OWLXMLParserException;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
+import org.semanticweb.owlapi.owllink.parser.OWLXMLParserException;
+import org.semanticweb.owlapi.owllink.parser.MyOWLXMLParserHandler;
 import org.semanticweb.owlapi.owllink.KBRequest;
 import org.semanticweb.owlapi.owllink.OWLlinkXMLVocabulary;
 import org.semanticweb.owlapi.owllink.builtin.requests.Set;
@@ -56,7 +56,7 @@ public class OWLlinkSetElementHandler extends AbstractOWLlinkKBRequestElementHan
     java.util.Set<OWLlinkLiteral> literals;
     String key;
 
-    public OWLlinkSetElementHandler(OWLXMLParserHandler handler) {
+    public OWLlinkSetElementHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 

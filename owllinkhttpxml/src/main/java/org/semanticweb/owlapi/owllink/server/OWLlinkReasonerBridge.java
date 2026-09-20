@@ -49,7 +49,6 @@ import org.semanticweb.owlapi.owllink.Response;
 import org.semanticweb.owlapi.owllink.builtin.requests.*;
 import org.semanticweb.owlapi.owllink.builtin.response.*;
 import org.semanticweb.owlapi.owllink.retraction.RetractRequest;
-import org.semanticweb.owlapi.owllink.server.legacy.OWLReasonerLegacyBridge;
 import org.semanticweb.owlapi.owllink.server.parser.OWLLinkRequestListener;
 import org.semanticweb.owlapi.owllink.server.parser.OWLlinkXMLRequestParserHandler;
 import org.semanticweb.owlapi.owllink.server.renderer.OWLlinkXMLResponseRenderer;
@@ -252,10 +251,7 @@ public class OWLlinkReasonerBridge implements RequestVisitor {
     }
 
     protected String getWarning(OWLReasoner reasoner) {
-        if (reasoner instanceof OWLReasonerLegacyBridge)
-            return ((OWLReasonerLegacyBridge) reasoner).getWarning();
-            //todo incrementally inspect output stream in order to get reasoner output (e.g. err, stdout)
-        else {
+        {
             Stack<String> warnings = this.warningsByReasoners.get(reasoner);
             if (warnings == null) {
                 return null;
@@ -283,7 +279,7 @@ public class OWLlinkReasonerBridge implements RequestVisitor {
             if (((AxiomNotInProfileException) e).getAxiom() != null)
                 errorString.append("axiom: " + ((AxiomNotInProfileException) e).getAxiom());
             if (((AxiomNotInProfileException) e).getProfile() != null)
-                errorString.append("profile: " + ((AxiomNotInProfileException) e).getProfile().getName());
+                errorString.append("profile: " + ((AxiomNotInProfileException) e).getProfile());
             this.response = new ProfileViolationErrorResponseImpl(errorString.toString().isEmpty() ? e.toString() : errorString.toString());
         } else if (e instanceof KBException) {
             this.response = new KBErrorResponseImpl(e.getMessage() == null ? e.toString() : e.getMessage());

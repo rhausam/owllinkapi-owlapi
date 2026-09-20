@@ -39,10 +39,6 @@
 
 package org.semanticweb.owlapi.owllink.parser;
 
-import org.coode.owlapi.owlxmlparser.OWLAnonymousIndividualElementHandler;
-import org.coode.owlapi.owlxmlparser.OWLIndividualElementHandler;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserException;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserHandler;
 import org.semanticweb.owlapi.model.OWLIndividual;
 import org.semanticweb.owlapi.owllink.builtin.response.IndividualSynonyms;
 import org.semanticweb.owlapi.owllink.builtin.response.IndividualSynonymsImpl;
@@ -58,7 +54,7 @@ public class OWLlinkIndividualSynonymsElementHandler extends AbstractOWLlinkKBRe
     protected Set<OWLIndividual> individuals;
 
 
-    public OWLlinkIndividualSynonymsElementHandler(OWLXMLParserHandler handler) {
+    public OWLlinkIndividualSynonymsElementHandler(MyOWLXMLParserHandler handler) {
         super(handler);
     }
 

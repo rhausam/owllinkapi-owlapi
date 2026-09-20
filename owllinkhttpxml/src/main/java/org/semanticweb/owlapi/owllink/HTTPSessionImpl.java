@@ -39,8 +39,9 @@
 
 package org.semanticweb.owlapi.owllink;
 
-import org.apache.xml.serialize.OutputFormat;
-import org.apache.xml.serialize.XMLSerializer;
+import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.owllink.builtin.response.OWLlinkErrorResponseException;
 import org.semanticweb.owlapi.owllink.builtin.response.ResponseMessage;
@@ -74,11 +75,13 @@ public class HTTPSessionImpl implements HTTPSession {
 
     private URL reasonerURL;
 
-    private XMLSerializer serializer;
-
-    private OutputFormat format;
     OWLOntologyManager manager;
     PrefixManagerProvider prov;
+    /**
+     * ontology handed to the response parser, which only uses it for its data factory; it lives in
+     * a private manager so that responses do not add an ontology to the (e.g. Protege) manager
+     */
+    private OWLOntology responseParsingOntology;
     private boolean serverAcceptsGzipEncoding = false;
 
     /**
@@ -89,16 +92,11 @@ public class HTTPSessionImpl implements HTTPSession {
 
     public HTTPSessionImpl(OWLOntologyManager manager, PrefixManagerProvider prov) throws MalformedURLException {
         this(manager, new URL("http://localhost:8080"), prov);
-        serializer = new XMLSerializer(format);
     }
 
     public HTTPSessionImpl(OWLOntologyManager manaager, URL reasonerURL, PrefixManagerProvider prov) {
         this.reasonerURL = reasonerURL;
         this.manager = manaager;
-        format = new OutputFormat();
-        format.setIndent(4);
-        format.setIndenting(true);
-        format.setPreserveSpace(false);
         this.prov = prov;
     }
 
@@ -145,6 +143,13 @@ public class HTTPSessionImpl implements HTTPSession {
         return this.serverAcceptsGzipEncoding;
     }
 
+
+    private synchronized OWLOntology getResponseParsingOntology() throws OWLOntologyCreationException {
+        if (responseParsingOntology == null) {
+            responseParsingOntology = OWLManager.createOWLOntologyManager().createOntology();
+        }
+        return responseParsingOntology;
+    }
 
     public ResponseMessage performRequests(Request... request)  {
         OWLlinkXMLFactoryRegistry registry = OWLlinkXMLFactoryRegistry.getInstance();
@@ -208,7 +213,7 @@ public class HTTPSessionImpl implements HTTPSession {
             SAXParserFactory factory = SAXParserFactory.newInstance();
             factory.setNamespaceAware(true);
             SAXParser parser = factory.newSAXParser();
-            OWLlinkXMLParserHandler handler = new OWLlinkXMLParserHandler(manager.createOntology(), prov, askedRequests, null);
+            OWLlinkXMLParserHandler handler = new OWLlinkXMLParserHandler(getResponseParsingOntology(), prov, askedRequests, null);
             handler.addFactories(registry.getParserFactories());
             parser.parse(is, handler);
             reader.close();
