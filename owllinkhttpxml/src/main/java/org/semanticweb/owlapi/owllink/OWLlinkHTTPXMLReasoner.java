@@ -431,11 +431,22 @@ public class OWLlinkHTTPXMLReasoner extends OWLReasonerBase implements OWLlinkRe
     }
 
     public NodeSet<OWLClass> getTypes(OWLNamedIndividual ind, boolean direct) throws InconsistentOntologyException, FreshEntitiesException, ReasonerInterruptedException, TimeOutException {
+        if (isUnknownIndividual(ind)) {
+            // an individual the server does not know is only an instance of owl:Thing
+            checkFreshEntityPolicy(ind);
+            OWLlinkClassHierarchyCache cache = classHierarchyCache;
+            return new OWLClassNodeSet(cache != null ? cache.getTopNode() : new OWLClassNode(getOWLDataFactory().getOWLThing()));
+        }
         GetTypes query = new GetTypes(defaultKnowledgeBase, ind, direct);
         return performRequestOWLAPI(query);
     }
 
     public NodeSet<OWLNamedIndividual> getObjectPropertyValues(OWLNamedIndividual ind, OWLObjectPropertyExpression pe) throws InconsistentOntologyException, FreshEntitiesException, ReasonerInterruptedException, TimeOutException {
+        if (isUnknownIndividual(ind)) {
+            // an individual the server does not know has no property values
+            checkFreshEntityPolicy(ind);
+            return new OWLNamedIndividualNodeSet();
+        }
         if (getIndividualNodeSetPolicy() == IndividualNodeSetPolicy.BY_NAME) {
             GetFlattenedObjectPropertyTargets query = new GetFlattenedObjectPropertyTargets(defaultKnowledgeBase, ind, pe);
             return convertByNamePolicy(performRequest(query));
@@ -451,11 +462,20 @@ public class OWLlinkHTTPXMLReasoner extends OWLReasonerBase implements OWLlinkRe
     }
 
     public Set<OWLLiteral> getDataPropertyValues(OWLNamedIndividual ind, OWLDataProperty pe) throws InconsistentOntologyException, FreshEntitiesException, ReasonerInterruptedException, TimeOutException {
+        if (isUnknownIndividual(ind)) {
+            checkFreshEntityPolicy(ind);
+            return new HashSet<OWLLiteral>();
+        }
         GetDataPropertyTargets query = new GetDataPropertyTargets(defaultKnowledgeBase, ind, pe);
         return performRequestOWLAPI(query);
     }
 
     public Node<OWLNamedIndividual> getSameIndividuals(OWLNamedIndividual ind) throws InconsistentOntologyException, FreshEntitiesException, ReasonerInterruptedException, TimeOutException {
+        if (isUnknownIndividual(ind)) {
+            // an individual the server does not know is only the same as itself
+            checkFreshEntityPolicy(ind);
+            return new OWLNamedIndividualNode(ind);
+        }
         GetSameIndividuals query = new GetSameIndividuals(defaultKnowledgeBase, ind);
         IndividualSynonyms answer = performRequest(query);
         if (answer.isNode()) {
@@ -465,6 +485,10 @@ public class OWLlinkHTTPXMLReasoner extends OWLReasonerBase implements OWLlinkRe
     }
 
     public NodeSet<OWLNamedIndividual> getDifferentIndividuals(OWLNamedIndividual ind) throws InconsistentOntologyException, FreshEntitiesException, ReasonerInterruptedException, TimeOutException {
+        if (isUnknownIndividual(ind)) {
+            checkFreshEntityPolicy(ind);
+            return new OWLNamedIndividualNodeSet();
+        }
         GetDifferentIndividuals query = new GetDifferentIndividuals(defaultKnowledgeBase, ind);
         SetOfIndividualSynsets answer = performRequest(query);
         if (answer.isNode())
@@ -584,9 +608,17 @@ public class OWLlinkHTTPXMLReasoner extends OWLReasonerBase implements OWLlinkRe
         return !cls.isBuiltIn() && !getRootOntology().containsClassInSignature(cls.getIRI(), Imports.INCLUDED);
     }
 
-    protected void checkFreshEntityPolicy(OWLClass cls) throws FreshEntitiesException {
+    /**
+     * @return true if the individual does not occur in the ontologies loaded into the reasoner, the
+     *         server does not know such an individual and would answer with an error
+     */
+    protected boolean isUnknownIndividual(OWLNamedIndividual individual) {
+        return !getRootOntology().containsIndividualInSignature(individual.getIRI(), Imports.INCLUDED);
+    }
+
+    protected void checkFreshEntityPolicy(OWLEntity entity) throws FreshEntitiesException {
         if (getFreshEntityPolicy() == FreshEntityPolicy.DISALLOW) {
-            throw new FreshEntitiesException(cls);
+            throw new FreshEntitiesException(entity);
         }
     }
 
